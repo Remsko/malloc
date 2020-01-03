@@ -11,9 +11,9 @@ INC_PATH += ./incs
 
 INC_NAME += malloc.h
 
+CFLAGS = -Wall -Werror -Wextra
 INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
 
-CFLAGS = -Wall -Werror -Wextra
 CPPFLAGS = $(addprefix -I,$(INC_PATH))
 
 SRC_PATH = srcs
@@ -30,12 +30,12 @@ OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	ar -rc $@ $^
+	$(CC) $^ -shared -o $@
+	ln -sf $(NAME) $(LINK)
 
 $(OBJ): $(INC) | $(OBJ_PATH)
 $(OBJ): $(OBJ_PATH)/%.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
-	ln -sf $(NAME) $(LINK)
 
 $(OBJ_PATH):
 	mkdir -p $@
