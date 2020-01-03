@@ -1,4 +1,9 @@
-NAME = malloc.a
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
+
+NAME = libft_malloc_$(HOSTTYPE).so
+LINK = libft_malloc.so
 CC = gcc
 RM = rm -rf
 
@@ -30,6 +35,7 @@ $(NAME): $(OBJ)
 $(OBJ): $(INC) | $(OBJ_PATH)
 $(OBJ): $(OBJ_PATH)/%.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
+	ln -sf $(NAME) $(LINK)
 
 $(OBJ_PATH):
 	mkdir -p $@
@@ -38,7 +44,7 @@ clean:
 	$(RM) $(OBJ_PATH)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) $(LINK)
 
 re: fclean all
 
