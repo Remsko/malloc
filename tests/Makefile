@@ -1,38 +1,37 @@
-ifeq ($(HOSTTYPE),)
-	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
-endif
-
-NAME = libft_malloc_$(HOSTTYPE).so
-LINK = libft_malloc.so
+NAME = test
 CC = gcc
 RM = rm -rf
 
 INC_PATH += ./incs
 
-INC_NAME += malloc.h
-
-CFLAGS = -Wall -Werror -Wextra
 INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
 
+CFLAGS = -Wall -Werror -Wextra -Wconversion -g3
 CPPFLAGS = $(addprefix -I,$(INC_PATH))
 
 SRC_PATH = srcs
+SRC_NAME += main.c
 
-SRC_SUB += malloc
-SRC_NAME += malloc.c
-SRC_NAME += free.c
+SRC_SUB += 
+SRC_NAME += 
 
-vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
+vpath %.c $(SRC_PATH) $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
 OBJ_PATH = obj
 OBJ_NAME = $(SRC_NAME:%.c=%.o)
 OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME)) 
 
+LIB_PATH = ../
+LIB = $(LIB_PATH)libft_malloc.so
+CFLAGS += -I$(LIB_PATH)/incs
+LDFLAGS += -L $(LIB_PATH)
+
+
 all: $(NAME)
 
+
 $(NAME): $(OBJ)
-	$(CC) $^ -shared -o $@
-	ln -sf $(NAME) $(LINK)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJ): $(INC) | $(OBJ_PATH)
 $(OBJ): $(OBJ_PATH)/%.o: %.c
@@ -41,16 +40,16 @@ $(OBJ): $(OBJ_PATH)/%.o: %.c
 $(OBJ_PATH):
 	mkdir -p $@
 
+$(LIB):
+	make -C $(LIB_PATH)
+
 clean:
 	$(RM) $(OBJ_PATH)
+	make -C $(LIB_PATH) clean
 
 fclean: clean
-	$(RM) $(NAME) $(LINK)
+	$(RM) $(NAME)
 
 re: fclean all
 
-test:
-	make -C tests
-	./tests/test
-
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re
