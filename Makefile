@@ -20,6 +20,7 @@ SRC_PATH = srcs
 
 SRC_SUB += malloc
 SRC_NAME += malloc.c
+SRC_NAME += free.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
@@ -44,8 +45,13 @@ clean:
 	$(RM) $(OBJ_PATH)
 
 fclean: clean
+	make fclean -C tests
 	$(RM) $(NAME) $(LINK)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+test: $(NAME)
+	make -C tests
+	LD_PRELOAD=./$(LINK) ./tests/test
+
+.PHONY: all clean fclean re test
