@@ -51,7 +51,7 @@ fclean: clean
 re: fclean all
 
 test: $(NAME)
-	make -C tests
+	make re -C tests
 	LD_PRELOAD=./$(LINK) ./tests/test
 
 .PHONY: all clean fclean re test

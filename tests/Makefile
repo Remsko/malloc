@@ -30,25 +30,21 @@ LDFLAGS += -L $(LIB_PATH)
 all: $(NAME)
 
 
-$(NAME): $(OBJ) | $(LIB)
-	$(CC) -o $@ $^ $(LDFLAGS)
+$(NAME): $(OBJ)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJ): $(INC) | $(OBJ_PATH)
 $(OBJ): $(OBJ_PATH)/%.o: %.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
 $(OBJ_PATH):
-	mkdir -p $@
-
-$(LIB):
-	make -C $(LIB_PATH)
+	@mkdir -p $@
 
 clean:
-	$(RM) $(OBJ_PATH)
-	make -C $(LIB_PATH) clean
+	@$(RM) $(OBJ_PATH)
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
 
 re: fclean all
 

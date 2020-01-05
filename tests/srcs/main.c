@@ -2,6 +2,17 @@
 #include <unistd.h>
 #include <string.h>
 
+void oversized_malloc()
+{
+	size_t oversized = (size_t)-1;
+	free(malloc(oversized));
+}
+
+void zero_malloc()
+{
+	free(malloc(0));
+}
+
 int main(void)
 {
 	void *ptr = malloc(10);
@@ -18,16 +29,26 @@ int main(void)
 	void *ptr8 = malloc(1456);
 	void *ptr9 = malloc(354);
 	free(ptr);
-	free(ptr1);
-	free(ptr2);
-	free(ptr3);
-	free(ptr4);
-	free(ptr5);
-	free(ptr6);
-	free(ptr7);
-	free(ptr8);
-	free(ptr9);
-
+	// free(ptr1);
+	// free(ptr2);
+	// free(ptr3);
+	// free(ptr4);
+	// free(ptr5);
+	// free(ptr6);
+	// free(ptr7);
+	// free(ptr8);
+	// free(ptr9);
+	(void)ptr1;
+	(void)ptr2;
+	(void)ptr3;
+	(void)ptr4;
+	(void)ptr5;
+	(void)ptr6;
+	(void)ptr7;
+	(void)ptr8;
+	(void)ptr9;
+	oversized_malloc();
+	zero_malloc();
 	write(1, "TEST DONE\n", 10);
 	return 0;
 }

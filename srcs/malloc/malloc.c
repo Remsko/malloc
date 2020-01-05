@@ -2,21 +2,17 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/mman.h>
+#include "../incs/malloc.h"
+
+#include <sys/resource.h>
 
 #define ALIGN(size, alignment) (((size) + (alignment - 1)) & ~(alignment - 1))
 
-#define MEMORY_ALIGNMENT (1 << 4)
-#define MEMORY_ALIGN(size) ALIGN(size, MEMORY_ALIGNMENT)
+#define MEMORY_ALIGNMENT (16)
+#define MEMORY_ALIGN(size) (ALIGN(size, MEMORY_ALIGNMENT))
 
-#define CHUNK_SIZE (1 << 14)
-#define CHUNK_ALIGN(size) ALIGN(size, CHUNK_SIZE)
-
-typedef struct s_header
-{
-	size_t block_size;
-} t_header;
-
-#define HEADER_SIZE sizeof(t_header)
+#define PAGE_SIZE (getpagesize())
+#define PAGE_ALIGN(size) (ALIGN(size, PAGE_SIZE))
 
 void *new_memory_allocation(size_t allocation_size)
 {
@@ -25,35 +21,37 @@ void *new_memory_allocation(size_t allocation_size)
 	allocation = mmap(NULL, allocation_size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 	if (allocation == MAP_FAILED)
 	{
-		perror("Could not mmap");
+		if (DEBUG)
+		{
+			perror("Could not mmap");
+		}
 		return NULL;
 	}
 	return (allocation);
 }
 
-void fill_header_with_allocation_size(void *chunk, size_t chunk_size)
+void *add_chunk(size_t size)
 {
-	*(size_t *)chunk = chunk_size; // We use this to free() the right number of bytes
-}
+	void *new_allocation;
+	size_t total_required;
+	size_t allocation_size;
 
-void *get_user_payload(void *chunk, size_t header_size)
-{
-	return (chunk + header_size);
+	total_required = MEMORY_ALIGN(size + CHUNK_SIZE);
+	allocation_size = PAGE_ALIGN(total_required);
+	if ((new_allocation = new_memory_allocation(allocation_size)) == NULL)
+		return NULL;
+
+	t_chunk_metadata *chunk = (t_chunk_metadata *)new_allocation;
+	chunk->total_size = allocation_size;
+	return new_allocation + sizeof(t_chunk_metadata);
 }
 
 void *malloc(size_t size)
 {
-	void *new_allocation;
-	size_t required;
-	size_t allocation_size;
+	void *user_payload;
 
 	write(1, "START\n", 7);
-	required = MEMORY_ALIGN(size + HEADER_SIZE);
-	allocation_size = CHUNK_ALIGN(required);
-	if ((new_allocation = new_memory_allocation(allocation_size)) == NULL)
-		return NULL;
-	fill_header_with_allocation_size(new_allocation, required);
+	user_payload = add_chunk(size);
 	write(1, "END\n", 4);
-
-	return get_user_payload(new_allocation, HEADER_SIZE);
+	return user_payload;
 }
