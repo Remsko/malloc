@@ -16,13 +16,13 @@ INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
 
 CPPFLAGS = $(addprefix -I,$(INC_PATH))
 
-SRC_PATH = srcs
+SRC_PATH = srcs/
+SRC_NAME += free.c
 
 SRC_SUB += malloc
 SRC_NAME += malloc.c
-SRC_NAME += free.c
 
-vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
+vpath %.c $(SRC_PATH) $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
 OBJ_PATH = obj
 OBJ_NAME = $(SRC_NAME:%.c=%.o)
