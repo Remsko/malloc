@@ -45,12 +45,13 @@ clean:
 	$(RM) $(OBJ_PATH)
 
 fclean: clean
+	make fclean -C tests
 	$(RM) $(NAME) $(LINK)
 
 re: fclean all
 
-test:
+test: $(NAME)
 	make -C tests
-	./tests/test
+	LD_PRELOAD=./$(LINK) ./tests/test
 
 .PHONY: all clean fclean re test
