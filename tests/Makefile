@@ -30,7 +30,7 @@ LDFLAGS += -L $(LIB_PATH)
 all: $(NAME)
 
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) | $(LIB)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJ): $(INC) | $(OBJ_PATH)

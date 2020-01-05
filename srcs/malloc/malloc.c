@@ -3,10 +3,20 @@
 #include <stdio.h>
 #include <sys/mman.h>
 
-int div_roundup(int a, int b)
+#define ALIGN(size, alignment) (((size) + (alignment - 1)) & ~(alignment - 1))
+
+#define MEMORY_ALIGNMENT (1 << 4)
+#define MEMORY_ALIGN(size) ALIGN(size, MEMORY_ALIGNMENT)
+
+#define CHUNK_SIZE (1 << 14)
+#define CHUNK_ALIGN(size) ALIGN(size, CHUNK_SIZE)
+
+typedef struct s_header
 {
-	return (a + b - 1) / b;
-}
+	size_t block_size;
+} t_header;
+
+#define HEADER_SIZE sizeof(t_header)
 
 void *new_memory_allocation(size_t allocation_size)
 {
@@ -18,24 +28,32 @@ void *new_memory_allocation(size_t allocation_size)
 		perror("Could not mmap");
 		return NULL;
 	}
-	return allocation;
+	return (allocation);
+}
+
+void fill_header_with_allocation_size(void *chunk, size_t chunk_size)
+{
+	*(size_t *)chunk = chunk_size; // We use this to free() the right number of bytes
+}
+
+void *get_user_payload(void *chunk, size_t header_size)
+{
+	return (chunk + header_size);
 }
 
 void *malloc(size_t size)
 {
-	void *new_region;
+	void *new_allocation;
 	size_t required;
-	int pagesize;
-	int num_pages;
+	size_t allocation_size;
 
 	write(1, "START\n", 7);
-	pagesize = getpagesize();
-	required = size + sizeof(size_t);
-	num_pages = div_roundup(required, pagesize);
-	new_region = new_memory_allocation(num_pages);
-	if (new_region == NULL)
+	required = MEMORY_ALIGN(size + HEADER_SIZE);
+	allocation_size = CHUNK_ALIGN(required);
+	if ((new_allocation = new_memory_allocation(allocation_size)) == NULL)
 		return NULL;
-	*(size_t *)new_region = required; // We use this to free() the right number of bytes
+	fill_header_with_allocation_size(new_allocation, required);
 	write(1, "END\n", 4);
-	return (new_region + sizeof(size_t));
+
+	return get_user_payload(new_allocation, HEADER_SIZE);
 }

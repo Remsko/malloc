@@ -1,9 +1,13 @@
 #include "malloc.h"
 #include <unistd.h>
+#include <string.h>
 
 int main(void)
 {
 	void *ptr = malloc(10);
+	strcpy(ptr, "delicieux\n");
+	write(1, ptr, 10);
+
 	void *ptr1 = malloc(1234);
 	void *ptr2 = malloc(112);
 	void *ptr3 = malloc(11235);
