@@ -1,7 +1,6 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <sys/mman.h>
 #include "../incs/malloc.h"
 
 #include <sys/resource.h>
@@ -13,22 +12,6 @@
 
 #define PAGE_SIZE (getpagesize())
 #define PAGE_ALIGN(size) (ALIGN(size, PAGE_SIZE))
-
-void *new_memory_allocation(size_t allocation_size)
-{
-	void *allocation;
-
-	allocation = mmap(NULL, allocation_size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-	if (allocation == MAP_FAILED)
-	{
-		if (DEBUG)
-		{
-			perror("Could not mmap");
-		}
-		return NULL;
-	}
-	return (allocation);
-}
 
 void *add_chunk(size_t size)
 {

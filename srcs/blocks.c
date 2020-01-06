@@ -1,4 +1,4 @@
-#include "../incs/malloc.h"
+#include "incs/malloc.h"
 
 /*
 ** BLOCK:	[header][payload]

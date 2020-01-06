@@ -31,12 +31,12 @@ OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $^ -shared -o $@
+	$(CC) $^ -shared  -o $@
 	ln -sf $(NAME) $(LINK)
 
 $(OBJ): $(INC) | $(OBJ_PATH)
 $(OBJ): $(OBJ_PATH)/%.o: %.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c -fPIC $<
 
 $(OBJ_PATH):
 	mkdir -p $@
