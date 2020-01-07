@@ -1,7 +1,7 @@
 #include "arena.h"
 #include "config.h";
 
-inline t_arena *get_arena_singletone(void)
+extern t_arena *get_arena_singletone(void)
 {
 	static t_arena arena =
 		(t_arena){
@@ -13,32 +13,38 @@ inline t_arena *get_arena_singletone(void)
 	return &arena;
 }
 
-void push_front_tiny(size_t request)
+static void arena_unshift_new_tiny(t_config cfg)
 {
-	t_config config_tiny;
+	t_heap *tiny_head;
 
-	config_tiny = config()[TINY];
+	tiny_head = get_arena_singletone()->tiny;
+	return unshift_new_heap(&tiny_head, cfg);
 }
 
-void push_front_small(size_t request)
+static void arena_unshift_new_small(t_config cfg)
 {
-	t_config config_small;
+	t_heap *small_head;
 
-	config_small = config()[SMALL];
+	small_head = get_arena_singletone()->small;
+	return unshift_new_heap(&small_head, cfg);
 }
 
-void push_front_large(size_t request)
+static void arena_unshift_new_large(t_config cfg)
 {
+	t_heap *large_head;
+
+	large_head = get_arena_singletone()->large;
+	return unshift_new_heap(&large_head, cfg);
 }
 
-inline void arena_push_front_to(t_config_type type, size_t request)
+extern void arena_unshift(t_config_type type)
 {
-	static void (*push_front[TYPES])() =
+	static void (*unshift[TYPES])(t_config config) =
 		{
-			[TINY] = &push_front_tiny,
-			[SMALL] = &push_front_small,
-			[LARGE] = &push_front_large,
+			[TINY] = &arena_unshift_new_tiny,
+			[SMALL] = &arena_unshift_new_small,
+			[LARGE] = &arena_unshift_new_large,
 		};
 
-	push_front[type](request);
+	unshift[type](config(type));
 }

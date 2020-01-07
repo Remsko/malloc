@@ -12,5 +12,6 @@ typedef struct s_arena
 } t_arena;
 
 t_arena *get_arena_singletone(void);
+void arena_unshift(t_config_type type);
 
 #endif

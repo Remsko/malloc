@@ -20,28 +20,29 @@ void *mmap_wrapper(size_t allocation_size)
 	return (allocation);
 }
 
-void *add_heap(size_t size)
-{
-	void *new_allocation;
-	size_t total_required;
-	size_t allocation_size;
+// void *add_heap(size_t size)
+// {
+// 	void *new_allocation;
+// 	size_t total_required;
+// 	size_t allocation_size;
 
-	total_required = MEMORY_ALIGN(size + HEAP_SIZE);
-	allocation_size = PAGE_ALIGN(total_required);
-	if ((new_allocation = mmap_wrapper(allocation_size)) == NULL)
-		return NULL;
+// 	total_required = MEMORY_ALIGN(size + HEAP_SIZE);
+// 	allocation_size = PAGE_ALIGN(total_required);
+// 	if ((new_allocation = mmap_wrapper(allocation_size)) == NULL)
+// 		return NULL;
 
-	t_heap *heap = (t_heap *)new_allocation;
-	heap->size = allocation_size;
-	return new_allocation + sizeof(t_heap);
-}
+// 	t_heap *heap = (t_heap *)new_allocation;
+// 	heap->size = allocation_size;
+// 	return new_allocation + sizeof(t_heap);
+// }
 
 void *malloc(size_t size)
 {
-	void *user_payload;
+	void *user_payload = NULL;
 
+	(void)size;
 	write(1, "START\n", 7);
-	user_payload = add_heap(size);
+	/*user_payload = add_heap(size);*/
 	write(1, "END\n", 4);
 	return user_payload;
 }

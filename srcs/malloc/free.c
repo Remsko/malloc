@@ -5,13 +5,13 @@
 
 void free(void *ptr)
 {
-	void *allocation;
+	// void *allocation;
 
 	if (ptr == NULL)
 		return;
-	allocation = ptr - sizeof(t_heap);
-	if (munmap(allocation, ((t_heap *)allocation)->size) != 0)
-	{
-		perror("Could not munmap");
-	}
+	// allocation = ptr - sizeof(t_heap);
+	// if (munmap(allocation, ((t_heap *)allocation)->size) != 0)
+	// {
+	// 	perror("Could not munmap");
+	// }
 }

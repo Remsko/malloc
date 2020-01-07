@@ -2,6 +2,7 @@
 #define CHUNK_H
 
 #include <stddef.h>
+#include <stdbool.h>
 
 typedef struct s_chunk
 {

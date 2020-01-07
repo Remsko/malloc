@@ -14,17 +14,17 @@ inline t_heap *new_heap(void *alloc, size_t alloc_size)
 	return heap;
 }
 
-inline t_heap *push_front_heap(t_heap **head, t_heap *new)
+inline t_heap *unshift_heap(t_heap **head, t_heap *new)
 {
 	new->next = (*head);
 	(*head) = new;
 	return new;
 }
 
-inline t_heap *push_front_new_heap(t_heap **head, void *alloc, size_t alloc_size)
+inline t_heap *unshift_new_heap(t_heap **head, void *alloc, size_t alloc_size)
 {
 	t_heap *new;
 
 	new = new_heap(alloc, alloc_size);
-	return push_heap(head, new);
+	return unshift_heap(head, new);
 }

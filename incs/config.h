@@ -17,6 +17,6 @@ typedef struct s_config
 	size_t chunk_size;
 } t_config;
 
-t_config *config();
+t_config config(t_config_type type);
 
 #endif
