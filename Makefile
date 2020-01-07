@@ -10,6 +10,9 @@ RM = rm -rf
 INC_PATH += ./incs
 
 INC_NAME += malloc.h
+INC_NAME += arena.h
+INC_NAME += heap.h
+INC_NAME += chunk.h
 
 CFLAGS = -Wall -Werror -Wextra
 INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
