@@ -29,7 +29,7 @@ extern t_heap **get_arena_heap_head(t_config_type type)
 	case LARGE:
 		return &arena->large;
 	default:
-		return &arena->large;
+		return NULL;
 	}
 }
 
