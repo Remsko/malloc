@@ -10,17 +10,29 @@ RM = rm -rf
 INC_PATH += ./incs
 
 INC_NAME += malloc.h
+INC_NAME += arena.h
+INC_NAME += heap.h
+INC_NAME += chunk.h
 
 CFLAGS = -Wall -Werror -Wextra
 INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
 
 CPPFLAGS = $(addprefix -I,$(INC_PATH))
 
-SRC_PATH = srcs
+SRC_PATH = srcs/
+SRC_NAME += free.c
 
 SRC_SUB += malloc
 SRC_NAME += malloc.c
 SRC_NAME += free.c
+
+SRC_SUB += shared
+SRC_NAME += align.c
+SRC_NAME += arena.c
+SRC_NAME += chunk.c
+SRC_NAME += config.c
+SRC_NAME += heap.c
+
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
@@ -31,12 +43,12 @@ OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $^ -shared -o $@
+	$(CC) $^ -shared  -o $@
 	ln -sf $(NAME) $(LINK)
 
 $(OBJ): $(INC) | $(OBJ_PATH)
 $(OBJ): $(OBJ_PATH)/%.o: %.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c -fPIC $<
 
 $(OBJ_PATH):
 	mkdir -p $@
@@ -51,7 +63,7 @@ fclean: clean
 re: fclean all
 
 test: $(NAME)
-	make -C tests
+	make re -C tests
 	LD_PRELOAD=./$(LINK) ./tests/test
 
 .PHONY: all clean fclean re test
