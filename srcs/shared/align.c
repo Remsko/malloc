@@ -1,5 +1,4 @@
-#include "malloc.h"
-#include <stddef.h>
+#include <unistd.h>
 
 inline size_t align(size_t size, size_t alignment)
 {

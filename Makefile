@@ -24,8 +24,17 @@ SRC_NAME += free.c
 
 SRC_SUB += malloc
 SRC_NAME += malloc.c
+SRC_NAME += free.c
 
-vpath %.c $(SRC_PATH) $(addprefix $(SRC_PATH)/, $(SRC_SUB))
+SRC_SUB += shared
+SRC_NAME += align.c
+SRC_NAME += arena.c
+SRC_NAME += chunk.c
+SRC_NAME += config.c
+SRC_NAME += heap.c
+
+
+vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
 OBJ_PATH = obj
 OBJ_NAME = $(SRC_NAME:%.c=%.o)
