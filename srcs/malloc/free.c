@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <sys/mman.h>
-#include "../incs/malloc.h"
+#include "malloc.h"
 
 void free(void *ptr)
 {
