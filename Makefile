@@ -20,7 +20,6 @@ INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
 CPPFLAGS = $(addprefix -I,$(INC_PATH))
 
 SRC_PATH = srcs/
-SRC_NAME += free.c
 
 SRC_SUB += malloc
 SRC_NAME += malloc.c
