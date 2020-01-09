@@ -3,6 +3,7 @@ CC = gcc
 RM = rm -rf
 
 INC_PATH += ./incs
+INC_NAME += test.h
 
 INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
 
@@ -11,9 +12,14 @@ CPPFLAGS = $(addprefix -I,$(INC_PATH))
 
 SRC_PATH = srcs
 SRC_NAME += main.c
+SRC_NAME += putstr.c
 
-SRC_SUB += 
-SRC_NAME += 
+SRC_SUB += case
+SRC_NAME += null.c
+SRC_NAME += oversized.c
+SRC_NAME += simple.c
+SRC_NAME += write.c
+SRC_NAME += zero.c
 
 vpath %.c $(SRC_PATH) $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
@@ -31,11 +37,11 @@ all: $(NAME)
 
 
 $(NAME): $(OBJ)
-	@$(CC) -o $@ $^ $(LDFLAGS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJ): $(INC) | $(OBJ_PATH)
 $(OBJ): $(OBJ_PATH)/%.o: %.c
-	@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
 $(OBJ_PATH):
 	@mkdir -p $@

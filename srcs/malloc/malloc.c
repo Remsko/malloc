@@ -15,6 +15,7 @@ void *malloc(size_t size)
 {
 	void *payload = NULL;
 
-	size = memory_align(size);
+	if (size == 0)
+		return NULL;
 	return payload;
 }
