@@ -1,5 +1,6 @@
 #include "chunk.h"
 #include "heap.h"
+#include "arena.h"
 #include "config.h"
 #include <stdbool.h>
 
@@ -43,6 +44,7 @@ inline t_chunk *get_first_chunk(t_heap *heap)
 	return (void *)heap;
 }
 
+
 extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk)
 {
 	(void)heap;
@@ -50,9 +52,31 @@ extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk)
 	return NULL;
 }
 
+
+inline bool		chunk_is_available(t_chunk *chunk, size_t s)
+{
+	return !(chunk->free) && get_payload_size(chunk) <= s;
+}
+
+inline bool		chunk_is_on_heap(t_heap *heap, size_t chunk_number)
+{
+	return (sizeof(t_chunk) * chunk_number <= heap->size);
+}
+
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
-	(void)type;
-	(void)size;
-	return NULL;
+	t_heap 		**heap;
+	t_chunk		*chunk;
+	size_t		chunk_count;
+
+	heap = get_arena_heap_head(type);
+	chunk = get_first_chunk(*heap);
+	chunk_count = 1;
+	while (!chunk_is_available(chunk, size))
+	{
+		chunk = get_next_chunk(chunk);
+		if (!chunk_is_on_heap(*heap, ++chunk_count))
+			return NULL;
+	}
+	return chunk;
 }
