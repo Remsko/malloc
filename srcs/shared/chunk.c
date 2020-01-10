@@ -76,13 +76,6 @@ inline bool		chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
-<<<<<<< HEAD
-	(void)type;
-	(void)size;
-
-	return NULL;
-}
-=======
 	t_heap 		*heap;
 	t_chunk		*chunk;
 
@@ -100,4 +93,3 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 	}
 	return chunk;
 }
->>>>>>> origin/master
