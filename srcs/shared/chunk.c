@@ -55,12 +55,12 @@ extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk)
 
 inline bool		chunk_is_available(t_chunk *chunk, size_t s)
 {
-	return !(chunk->free) && get_payload_size(chunk) <= s;
+	return !(chunk->free) && chunk->forward <= s;
 }
 
-inline bool		chunk_is_on_heap(t_heap *heap, size_t chunk_number)
+inline bool		chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 {
-	return (sizeof(t_chunk) * chunk_number <= heap->size);
+	return !(heap + heap->size > chunk);
 }
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
@@ -75,7 +75,7 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 	while (!chunk_is_available(chunk, size))
 	{
 		chunk = get_next_chunk(chunk);
-		if (!chunk_is_on_heap(*heap, ++chunk_count))
+		if (!chunk_is_on_heap((void*)*heap, (void*)chunk))
 			return NULL;
 	}
 	return chunk;
