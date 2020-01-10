@@ -70,10 +70,10 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 	size_t		chunk_count;
 
 	heap = *(get_arena_heap_head(type));
-	chunk = get_first_chunk(heap);
-	chunk_count = 1;
 	while (heap)
 	{
+		chunk = get_first_chunk(heap);
+		chunk_count = 1;
 		while (!chunk_is_available(chunk, size))
 		{
 			chunk = get_next_chunk(chunk);
