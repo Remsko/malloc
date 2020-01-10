@@ -41,9 +41,8 @@ inline size_t get_payload_size(t_chunk *chunk)
 
 inline t_chunk *get_first_chunk(t_heap *heap)
 {
-	return (void *)heap;
+	return (void *)heap + sizeof(t_heap);
 }
-
 
 extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk)
 {
@@ -52,21 +51,20 @@ extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk)
 	return NULL;
 }
 
-
-inline bool		chunk_is_available(t_chunk *chunk, size_t s)
+inline bool chunk_is_available(t_chunk *chunk, size_t s)
 {
 	return !(chunk->free) && chunk->forward <= s;
 }
 
-inline bool		chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
+inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 {
-	return ((void*)heap + heap->size > (void*)chunk);
+	return ((void *)heap + heap->size > (void *)chunk);
 }
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
-	t_heap 		*heap;
-	t_chunk		*chunk;
+	t_heap *heap;
+	t_chunk *chunk;
 
 	heap = *(get_arena_heap_head(type));
 	while (heap)
