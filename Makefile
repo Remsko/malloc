@@ -31,6 +31,7 @@ SRC_NAME += arena.c
 SRC_NAME += chunk.c
 SRC_NAME += config.c
 SRC_NAME += heap.c
+SRC_NAME += memory.c
 
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))

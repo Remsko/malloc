@@ -44,13 +44,13 @@ inline t_chunk *get_first_chunk(t_heap *heap)
 	return (void *)heap + sizeof(t_heap);
 }
 
-inline void set_chunk_header(t_chunk *chunk, t_bool is_free, size_t size)
+void set_chunk(t_chunk *chunk, bool is_free, size_t size)
 {
 	chunk->free = is_free;
 	chunk->forward = size;
 }
 
-extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk, t_config_type type, size_t size)
+extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_config config;
 	t_chunk *next_chunk;
@@ -59,8 +59,8 @@ extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk, t_config_type 
 	next_chunk = get_next_chunk(chunk);
 	if (sizeof(t_chunk) + size + config.chunk_min <= chunk->forward)
 	{
-		set_chunk_header(chunk, false, size);
-		set_chunk_header(chunk + size, true, (size_t)(next_chunk - (chunk + size)));
+		set_chunk(chunk, false, size);
+		set_chunk(chunk + size, true, (size_t)(next_chunk - (chunk + size)));
 	}
 
 	return chunk;
@@ -84,7 +84,6 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 	heap = *(get_arena_heap_head(type));
 	while (heap != NULL)
 	{
-		// if pas de chunk de la bonne taille return 1er chunk
 		chunk = get_first_chunk(heap);
 		while (chunk_is_on_heap(heap, chunk))
 		{
