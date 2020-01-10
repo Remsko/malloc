@@ -58,25 +58,29 @@ inline bool		chunk_is_available(t_chunk *chunk, size_t s)
 	return !(chunk->free) && chunk->forward <= s;
 }
 
-inline bool		chunk_is_on_heap(void *heap, void *chunk)
+inline bool		chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 {
-	return (heap + ((t_heap*)heap)->size > chunk);
+	return ((void*)heap + heap->size > (void*)chunk);
 }
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
-	t_heap 		**heap;
+	t_heap 		*heap;
 	t_chunk		*chunk;
 	size_t		chunk_count;
 
-	heap = get_arena_heap_head(type);
-	chunk = get_first_chunk(*heap);
+	heap = *(get_arena_heap_head(type));
+	chunk = get_first_chunk(heap);
 	chunk_count = 1;
-	while (!chunk_is_available(chunk, size))
+	while (heap)
 	{
-		chunk = get_next_chunk(chunk);
-		if (!chunk_is_on_heap((void*)*heap, (void*)chunk))
-			return NULL;
+		while (!chunk_is_available(chunk, size))
+		{
+			chunk = get_next_chunk(chunk);
+			if (!chunk_is_on_heap(heap, chunk))
+				return NULL;
+		}
+		heap = heap->next;
 	}
 	return chunk;
 }
