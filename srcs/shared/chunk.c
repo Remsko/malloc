@@ -41,7 +41,7 @@ inline size_t get_payload_size(t_chunk *chunk)
 
 inline t_chunk *get_first_chunk(t_heap *heap)
 {
-	return (void *)heap;
+	return (void *)heap + sizeof(t_heap);
 }
 
 inline void set_chunk_header(t_chunk *chunk, t_bool is_free, size_t size)
@@ -66,34 +66,33 @@ extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk, t_config_type 
 	return chunk;
 }
 
-
-inline bool		chunk_is_available(t_chunk *chunk, size_t s)
+inline bool chunk_is_available(t_chunk *chunk, size_t s)
 {
-	return !(chunk->free) && chunk->forward <= s;
+	return chunk->free && chunk->forward <= s;
 }
 
-inline bool		chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
+inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 {
-	return ((void*)heap + heap->size > (void*)chunk);
+	return (void *)heap + heap->size > (void *)chunk;
 }
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
-	t_heap 		*heap;
-	t_chunk		*chunk;
+	t_heap *heap;
+	t_chunk *chunk;
 
 	heap = *(get_arena_heap_head(type));
-	while (heap)
+	while (heap != NULL)
 	{
 		// if pas de chunk de la bonne taille return 1er chunk
 		chunk = get_first_chunk(heap);
-		while (!chunk_is_available(chunk, size))
+		while (chunk_is_on_heap(heap, chunk))
 		{
+			if (chunk_is_available(chunk, size))
+				return chunk;
 			chunk = get_next_chunk(chunk);
-			if (!chunk_is_on_heap(heap, chunk))
-				break;
 		}
 		heap = heap->next;
 	}
-	return chunk;
+	return NULL;
 }
