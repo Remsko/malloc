@@ -53,12 +53,12 @@ extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk)
 
 inline bool chunk_is_available(t_chunk *chunk, size_t s)
 {
-	return !(chunk->free) && chunk->forward <= s;
+	return chunk->free && chunk->forward <= s;
 }
 
 inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 {
-	return ((void *)heap + heap->size > (void *)chunk);
+	return (void *)heap + heap->size > (void *)chunk;
 }
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
@@ -67,16 +67,16 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 	t_chunk *chunk;
 
 	heap = *(get_arena_heap_head(type));
-	while (heap)
+	while (heap != NULL)
 	{
 		chunk = get_first_chunk(heap);
-		while (!chunk_is_available(chunk, size))
+		while (chunk_is_on_heap(heap, chunk))
 		{
+			if (chunk_is_available(chunk, size))
+				return chunk;
 			chunk = get_next_chunk(chunk);
-			if (!chunk_is_on_heap(heap, chunk))
-				break;
 		}
 		heap = heap->next;
 	}
-	return chunk;
+	return NULL;
 }
