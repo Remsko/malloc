@@ -13,5 +13,7 @@ typedef struct s_arena
 
 t_arena *get_arena_singletone(void);
 t_heap *arena_unshift(t_config_type type, size_t size);
+t_heap **get_arena_heap_head(t_config_type type);
+
 
 #endif
