@@ -1,4 +1,6 @@
 #include "chunk.h"
+#include "heap.h"
+#include "config.h"
 #include <stdbool.h>
 
 inline t_chunk *get_chunk(void *start)
@@ -26,7 +28,7 @@ inline t_chunk *get_next_chunk(t_chunk *chunk)
 	return get_chunk((void *)chunk + chunk->forward);
 }
 
-inline void *get_block_payload_from_header(t_chunk *chunk)
+inline void *get_chunk_payload(t_chunk *chunk)
 {
 	return (void *)chunk + sizeof(t_chunk);
 }
@@ -34,4 +36,23 @@ inline void *get_block_payload_from_header(t_chunk *chunk)
 inline size_t get_payload_size(t_chunk *chunk)
 {
 	return chunk->forward - sizeof(t_chunk);
+}
+
+inline t_chunk *get_first_chunk(t_heap *heap)
+{
+	return (void *)heap;
+}
+
+extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk)
+{
+	(void)heap;
+	(void)chunk;
+	return NULL;
+}
+
+extern t_chunk *search_free_chunk(t_config_type type, size_t size)
+{
+	(void)type;
+	(void)size;
+	return NULL;
 }
