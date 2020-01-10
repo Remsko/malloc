@@ -53,18 +53,15 @@ inline void set_chunk_header(t_chunk *chunk, t_bool is_free, size_t size)
 extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_config config;
+	t_chunk *next_chunk;
 
 	config = get_config(type);
-	// if chunk size > (2 * chunkheader size) + size + minchunksize
-	if ((2 * sizeof(t_chunk)) + size + config.chunk_min)
+	next_chunk = get_next_chunk(chunk);
+	if (sizeof(t_chunk) + size + config.chunk_min <= chunk->forward)
 	{
-		// 		Process splitting
 		set_chunk_header(chunk, false, size);
-		set_chunk_header(chunk + size, true, (size_t)(heap - chunk));
+		set_chunk_header(chunk + size, true, (size_t)(next_chunk - (chunk + size)));
 	}
-
-	// return chunkStartPointer
-
 
 	return chunk;
 }
