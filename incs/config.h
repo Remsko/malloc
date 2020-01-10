@@ -14,7 +14,8 @@ typedef enum e_config_type
 typedef struct s_config
 {
 	size_t heap_size;
-	size_t chunk_size;
+	size_t chunk_min;
+	size_t chunk_max;
 } t_config;
 
 t_config get_config(t_config_type type);

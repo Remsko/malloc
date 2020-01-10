@@ -43,10 +43,22 @@ inline t_chunk *get_first_chunk(t_heap *heap)
 	return (void *)heap;
 }
 
-extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk)
+extern t_chunk *split_chunk_forward(t_heap *heap, t_chunk *chunk, t_config_type type)
 {
 	(void)heap;
 	(void)chunk;
+	// get heap size
+	// get full size of the chunk
+	// if chunk size > (2 * chunkheader size) + size + minchunksize
+	if ((2 * sizeof(t_chunk)) + size + )
+	// 		Process splitting
+	//		*chunk = newheaderchunk
+	//		chunk += headerchunk size + size
+	//		*chunk = new header free chunk
+
+	// return chunkStartPointer
+
+
 	return NULL;
 }
 
@@ -54,5 +66,6 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
 	(void)type;
 	(void)size;
+
 	return NULL;
 }

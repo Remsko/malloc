@@ -8,7 +8,8 @@ static t_config config_tiny()
 	xpages = getpagesize() * 4;
 	return (t_config){
 		.heap_size = xpages,
-		.chunk_size = xpages / 128,
+		.chunk_min = 1,
+		.chunk_max = xpages / 128,
 	};
 }
 
@@ -19,7 +20,8 @@ static t_config config_small()
 	xpages = getpagesize() * 32;
 	return (t_config){
 		.heap_size = xpages,
-		.chunk_size = xpages / 128,
+		.chunk_min = (xpages / 8) / 128
+		.chunk_max = xpages / 128,
 	};
 }
 
@@ -49,7 +51,7 @@ extern t_config_type get_config_type(size_t size)
 	while (type < TYPES)
 	{
 		config = get_config(type);
-		if (size < config.chunk_size)
+		if (size < config.chunk_max)
 			break;
 		type++;
 	}

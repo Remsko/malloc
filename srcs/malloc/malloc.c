@@ -28,7 +28,7 @@ t_chunk *get_free_chunk(size_t size)
 		return chunk;
 	heap = arena_unshift(type, size);
 	chunk = get_first_chunk(heap);
-	return split_chunk_forward(heap, chunk);
+	return split_chunk_forward(heap, chunk, type);
 }
 
 void *malloc(size_t size)
