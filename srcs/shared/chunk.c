@@ -58,9 +58,9 @@ inline bool		chunk_is_available(t_chunk *chunk, size_t s)
 	return !(chunk->free) && chunk->forward <= s;
 }
 
-inline bool		chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
+inline bool		chunk_is_on_heap(void *heap, void *chunk)
 {
-	return !(heap + heap->size > chunk);
+	return (heap + ((t_heap*)heap)->size > chunk);
 }
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
