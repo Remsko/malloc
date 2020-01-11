@@ -44,25 +44,18 @@ inline t_chunk *get_first_chunk(t_heap *heap)
 	return (void *)heap + sizeof(t_heap);
 }
 
-void set_chunk(t_chunk *chunk, bool is_free, size_t size)
-{
-	chunk->free = is_free;
-	chunk->forward = size;
-}
-
 extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_config config;
-	t_chunk *next_chunk;
+	size_t rest;
 
 	config = get_config(type);
-	next_chunk = get_next_chunk(chunk);
-	if (sizeof(t_chunk) + size + config.chunk_min <= chunk->forward)
+	rest = chunk->forward - size;
+	if (sizeof(t_chunk) + config.chunk_min <= rest)
 	{
-		set_chunk(chunk, false, size);
-		set_chunk(chunk + size, true, (size_t)(next_chunk - (chunk + size)));
+		new_chunk((void *)chunk, size);
+		new_chunk((void *)chunk + size, rest);
 	}
-
 	return chunk;
 }
 
