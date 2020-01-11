@@ -44,6 +44,7 @@ inline t_chunk *get_first_chunk(t_heap *heap)
 	return (void *)heap + sizeof(t_heap);
 }
 
+#include "unistd.h"
 extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_config config;
@@ -64,9 +65,14 @@ inline bool chunk_is_available(t_chunk *chunk, size_t s)
 	return chunk->free && chunk->forward <= s;
 }
 
-inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
+bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 {
-	return (void *)heap + heap->size > (void *)chunk;
+	void *start;
+	void *end;
+
+	start = (void *)heap;
+	end = (void *)heap + heap->size;
+	return (void *)chunk > start && (void *)chunk < end;
 }
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)

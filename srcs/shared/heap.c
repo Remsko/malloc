@@ -1,4 +1,5 @@
 #include "heap.h"
+#include "config.h"
 
 inline t_heap *get_heap(void *memory)
 {
@@ -27,4 +28,14 @@ inline t_heap *unshift_new_heap(t_heap **head, void *memory, size_t size)
 
 	new = new_heap(memory, size);
 	return unshift_heap(head, new);
+}
+
+#include "unistd.h"
+extern size_t get_heap_size(t_config_type type)
+{
+	t_config config;
+
+	config = get_config(type);
+	write(1, "poulet", 6);
+	return config.heap_size;
 }

@@ -38,12 +38,11 @@ extern t_heap **get_arena_heap_head(t_config_type type)
 extern t_heap *arena_unshift(t_config_type type, size_t size)
 {
 	t_heap **head;
-	void *memory = NULL;
+	void *memory;
 
-	size = page_align(size);
 	memory = get_some_memory(size);
 	head = get_arena_heap_head(type);
-	if (!head || !memory)
+	if (memory == NULL || head == NULL)
 		return NULL;
 	return unshift_new_heap(head, memory, size);
 }
