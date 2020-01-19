@@ -4,16 +4,16 @@
 
 t_heap *search_heap(t_chunk *chunk)
 {
-	t_heap *heap;
+	t_heap **heap;
 	t_config_type type;
 
 	type = get_config_type(chunk->forward);
-	heap = *(get_arena_heap_head(type));
-	while (heap != NULL)
+	heap = get_arena_heap_head(type);
+	while ((*heap) != NULL)
 	{
-		if (chunk_is_on_heap(heap, chunk))
-			return heap;
-		heap = heap->next;
+		if (chunk_is_on_heap(*heap, chunk))
+			return *heap;
+		heap = &(*heap)->next;
 	}
 	return NULL;
 }

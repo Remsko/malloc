@@ -15,6 +15,13 @@ inline t_heap *new_heap(void *memory, size_t size)
 	return heap;
 }
 
+extern void delete_heap(t_heap **head, t_heap *delete)
+{
+	while ((*head) != delete)
+		head = &(*head)->next;
+	*head = delete->next;
+}
+
 inline t_heap *unshift_heap(t_heap **head, t_heap *new)
 {
 	new->next = (*head);
@@ -30,12 +37,10 @@ inline t_heap *unshift_new_heap(t_heap **head, void *memory, size_t size)
 	return unshift_heap(head, new);
 }
 
-#include "unistd.h"
 extern size_t get_heap_size(t_config_type type)
 {
 	t_config config;
 
 	config = get_config(type);
-	write(1, "poulet", 6);
 	return config.heap_size;
 }

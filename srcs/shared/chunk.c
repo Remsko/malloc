@@ -44,7 +44,6 @@ inline t_chunk *get_first_chunk(t_heap *heap)
 	return (void *)heap + sizeof(t_heap);
 }
 
-#include "unistd.h"
 extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_config config;
@@ -77,20 +76,20 @@ bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
-	t_heap *heap;
+	t_heap **heap;
 	t_chunk *chunk;
 
-	heap = *(get_arena_heap_head(type));
-	while (heap != NULL)
+	heap = get_arena_heap_head(type);
+	while ((*heap) != NULL)
 	{
-		chunk = get_first_chunk(heap);
-		while (chunk_is_on_heap(heap, chunk))
+		chunk = get_first_chunk(*heap);
+		while (chunk_is_on_heap(*heap, chunk))
 		{
 			if (chunk_is_available(chunk, size))
 				return chunk;
 			chunk = get_next_chunk(chunk);
 		}
-		heap = heap->next;
+		heap = &(*heap)->next;
 	}
 	return NULL;
 }
