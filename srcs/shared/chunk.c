@@ -44,11 +44,13 @@ inline t_chunk *get_first_chunk(t_heap *heap)
 	return (void *)heap + sizeof(t_heap);
 }
 
+#include <assert.h>
 extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_config config;
 	size_t rest;
 
+	assert(size > chunk->forward);
 	config = get_config(type);
 	rest = chunk->forward - size;
 	if (sizeof(t_chunk) + config.chunk_min <= rest)
@@ -74,11 +76,14 @@ bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 	return (void *)chunk > start && (void *)chunk < end;
 }
 
+#include <string.h>
+#include <unistd.h>
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
 	t_heap **heap;
 	t_chunk *chunk;
 
+	write(1, "search; ", strlen("search; "));
 	heap = get_arena_heap_head(type);
 	while ((*heap) != NULL)
 	{
