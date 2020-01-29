@@ -2,6 +2,7 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
+UNAME_S := $(shell uname -s)
 NAME = libft_malloc_$(HOSTTYPE).so
 LINK = libft_malloc.so
 CC = gcc
@@ -64,6 +65,11 @@ re: fclean all
 
 test: $(NAME)
 	make re -C tests
-	LD_PRELOAD=./$(LINK) ./tests/test
+    ifeq ($(UNAME_S),Darwin)
+		mv tests/test .
+		./run.sh ./test
+	else 
+		LD_PRELOAD=./$(LINK) ./tests/test
+    endif
 
 .PHONY: all clean fclean re test

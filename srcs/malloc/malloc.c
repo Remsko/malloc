@@ -6,6 +6,20 @@
 
 #include <unistd.h>
 #include <string.h>
+
+static void putnbr(size_t size)
+{
+	if (size > 9)
+	{
+		putnbr(size / 10);
+		putnbr(size % 10);
+	}
+	else
+	{
+		write(1, (char[1]){size + '0'}, 1);
+	}
+}
+
 t_chunk *get_free_chunk(size_t size)
 {
 	t_heap *heap;
@@ -13,43 +27,41 @@ t_chunk *get_free_chunk(size_t size)
 	t_config_type type;
 
 	type = get_config_type(size);
-	if (type != LARGE)
-		size = page_align(size);
+	write(1, " type: ", strlen(" type: "));
+	putnbr(type);
+	write(1, " ", 1);
+	if (type == LARGE)
+	{
+		;
+	}
 	else if ((chunk = search_free_chunk(type, size)))
 	{
-		write(1, "found\n", strlen("found\n"));
+		split_chunk(chunk, type, size);
 		return chunk;
 	}
-	else
-		size = get_heap_size(type);
-	write(1, "mmap; ", strlen("mmap; "));
 	heap = arena_unshift(type, size);
 	if (heap == NULL)
 		return NULL;
 	chunk = get_first_chunk(heap);
 	chunk->forward = heap->size - sizeof(t_heap);
-	write(1, "split; ", strlen("split; "));
 	split_chunk(chunk, type, size);
-	write(1, "splitted; ", strlen("splitted; "));
+	//putnbr(chunk->forward);
 	return chunk;
 }
 
-int div_roundup(int a, int b)
-{
-	return (a + b - 1) / b;
-}
-
-#include <sys/mman.h>
 void *malloc(size_t size)
 {
-	t_chunk *chunk = NULL;
-	void *payload = NULL;
+	t_chunk *chunk;
+	void *payload;
+	size_t chunk_size;
 
-	write(1, "start; ", strlen("start; "));
+	//write(1, "start; ", strlen("start; "));
 	if (size == 0)
 		return NULL;
-	//size = memory_align(sizeof(t_chunk) + size);
-	chunk = get_free_chunk(size);
+	chunk_size = memory_align(size + sizeof(t_chunk));
+	if (chunk_size < size)
+		return NULL;
+	chunk = get_free_chunk(chunk_size);
 	if (chunk == NULL)
 		return NULL;
 	chunk->free = false;

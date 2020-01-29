@@ -35,14 +35,41 @@ extern t_heap **get_arena_heap_head(t_config_type type)
 	}
 }
 
+#include <string.h>
+#include <unistd.h>
+
+void putnbr(size_t size)
+{
+	if (size > 9)
+	{
+		putnbr(size / 10);
+		putnbr(size % 10);
+	}
+	else
+	{
+		write(1, (char[1]){size + '0'}, 1);
+	}
+}
+
 extern t_heap *arena_unshift(t_config_type type, size_t size)
 {
 	t_heap **head;
 	void *memory;
+	size_t total;
 
-	memory = get_some_memory(size);
-	head = get_arena_heap_head(type);
-	if (memory == NULL || head == NULL)
+	total = size + sizeof(t_heap);
+	if (total < size)
 		return NULL;
-	return unshift_new_heap(head, memory, size);
+	memory = get_some_memory(total);
+	head = get_arena_heap_head(type);
+	if (memory == NULL)
+	{
+		write(1, "NO MEM! ", strlen("NO MEM! "));
+		return NULL;
+	}
+	if (head == NULL)
+	{
+		return NULL;
+	}
+	return unshift_new_heap(head, memory, total);
 }

@@ -23,6 +23,7 @@ SRC_NAME += zero.c
 
 SRC_SUB += unit
 SRC_NAME += split_chunk.c
+SRC_NAME += search_chunk.c
 
 vpath %.c $(SRC_PATH) $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 

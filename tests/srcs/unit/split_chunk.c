@@ -11,6 +11,7 @@ t_chunk *dummy_new_chunk(size_t size)
     return chk;
 }
 
+#include <assert.h>
 void test_split_chunk(void)
 {
     // case simple
@@ -38,7 +39,7 @@ void test_split_chunk(void)
     putstr("\n");
 
     // case no space
-    //
+
     putstr("No Space: ");
     t_chunk *nospace = split_chunk(simple, 2, 196);
     if (nospace->forward != 256)
@@ -52,7 +53,7 @@ void test_split_chunk(void)
     putstr("\n");
 
     // case space left
-    //
+
     putstr("Space Left: ");
     t_chunk *spaceleft = split_chunk(splitted, 2, 512);
     if (spaceleft->forward != 512)
@@ -74,15 +75,15 @@ void test_split_chunk(void)
     }
     // too much
     //
-    putstr("Space Left: ");
-    spaceleft = split_chunk(splitted, 2, 5012);
-    if (spaceleft->forward != 512)
-    {
-        return putstr(" NO\n");
-    }
-    else
-    {
-        putstr(" OK");
-    }
+    // putstr("Oversized: ");
+    // spaceleft = split_chunk(splitted, 2, 5012);
+    // if (spaceleft->forward != 512)
+    // {
+    //     return putstr(" NO\n");
+    // }
+    // else
+    // {
+    //     putstr(" OK");
+    // }
     putstr("\n");
 }
