@@ -35,6 +35,7 @@ extern t_heap **get_arena_heap_head(t_config_type type)
 	}
 }
 
+<<<<<<< Updated upstream
 #include <string.h>
 #include <unistd.h>
 
@@ -51,6 +52,9 @@ void putnbr(size_t size)
 	}
 }
 
+=======
+#include "debug.h"
+>>>>>>> Stashed changes
 extern t_heap *arena_unshift(t_config_type type, size_t size)
 {
 	t_heap **head;

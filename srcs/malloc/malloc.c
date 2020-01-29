@@ -3,6 +3,7 @@
 #include "config.h"
 #include "arena.h"
 #include "chunk.h"
+#include "debug.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -36,9 +37,18 @@ t_chunk *get_free_chunk(size_t size)
 	}
 	else if ((chunk = search_free_chunk(type, size)))
 	{
+<<<<<<< Updated upstream
 		split_chunk(chunk, type, size);
 		return chunk;
 	}
+=======
+		print_number("chunk found", size);
+		return chunk;
+	}
+	//else
+	//size = get_heap_size(type);
+
+>>>>>>> Stashed changes
 	heap = arena_unshift(type, size);
 	if (heap == NULL)
 		return NULL;
@@ -58,10 +68,15 @@ void *malloc(size_t size)
 	//write(1, "start; ", strlen("start; "));
 	if (size == 0)
 		return NULL;
+<<<<<<< Updated upstream
 	chunk_size = memory_align(size + sizeof(t_chunk));
 	if (chunk_size < size)
 		return NULL;
 	chunk = get_free_chunk(chunk_size);
+=======
+	//size = memory_align(sizeof(t_chunk) + size);
+	chunk = get_free_chunk(size);
+>>>>>>> Stashed changes
 	if (chunk == NULL)
 		return NULL;
 	chunk->free = false;

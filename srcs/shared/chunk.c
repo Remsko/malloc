@@ -44,17 +44,27 @@ inline t_chunk *get_first_chunk(t_heap *heap)
 	return (void *)heap + sizeof(t_heap);
 }
 
+<<<<<<< Updated upstream
 #include <assert.h>
+=======
+#include "debug.h"
+>>>>>>> Stashed changes
 extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_config config;
 	size_t rest;
 
+<<<<<<< Updated upstream
 	assert(size <= chunk->forward);
+=======
+	//print_number("size", size);
+	//print_number("chunk", chunk->forward);
+>>>>>>> Stashed changes
 	config = get_config(type);
 	rest = chunk->forward - size;
 	if (sizeof(t_chunk) + config.chunk_min <= rest)
 	{
+		//print_number("rest", size);
 		new_chunk((void *)chunk, size);
 		new_chunk((void *)chunk + size, rest);
 	}

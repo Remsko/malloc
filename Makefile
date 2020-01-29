@@ -14,6 +14,7 @@ INC_NAME += malloc.h
 INC_NAME += arena.h
 INC_NAME += heap.h
 INC_NAME += chunk.h
+INC_NAME += debug.h
 
 CFLAGS = -Wall -Werror -Wextra
 INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
@@ -34,6 +35,9 @@ SRC_NAME += config.c
 SRC_NAME += heap.c
 SRC_NAME += memory.c
 
+SRC_SUB += debug
+SRC_NAME += print_number.c
+SRC_NAME += print_string.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
