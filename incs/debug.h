@@ -5,5 +5,6 @@
 
 void print_string(char *str);
 void print_number(char *input, size_t nb);
+int ft_putnbr(size_t n);
 
 #endif

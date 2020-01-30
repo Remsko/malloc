@@ -2,23 +2,23 @@
 
 int main(void)
 {
-	test_split_chunk();
+	// test_split_chunk();
 	test_search_chunk();
 
-	test_free_null();
-	test_oversized_malloc();
-	test_zero_malloc();
-	test_zero_malloc_free();
+	// test_free_null();
+	// test_oversized_malloc();
+	// test_zero_malloc();
+	// test_zero_malloc_free();
 
-	// test_simple(5);
-	// test_simple(500);
-	// test_simple(5000);
-	// test_simple(50000);
-	// test_simple(500000);
-	// test_simple(4096 * 2);
-	// test_simple(4096 * 4);
-	// test_simple(4096 * 8);
-	// test_simple(4096 * 16);
+	test_simple(5);
+	test_simple(500);
+	test_simple(5000);
+	test_simple(50000);
+	test_simple(500000);
+	test_simple(4096 * 2);
+	test_simple(4096 * 4);
+	test_simple(4096 * 8);
+	test_simple(4096 * 16);
 
 	for (int i = 0; i < 450; i++)
 	{

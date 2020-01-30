@@ -1,16 +1,25 @@
 #include "debug.h"
 #include "string.h"
 #include <stddef.h>
+#include <unistd.h>
 
-void ft_putnbr(size_t nb)
+void putchar(char c)
 {
-	if (nb >= 10)
+	write(1, &c, 1);
+}
+
+int ft_putnbr(size_t n)
+{
+	if (n >= 10)
 	{
-		ft_putnbr(nb / 10);
-		ft_putnbr(nb % 10);
+		ft_putnbr(n / 10);
+		putchar(n % 10 + '0');
 	}
-	else
-		print_string((char[1]){nb + '0'});
+	if (n < 10)
+	{
+		putchar(n % 10 + '0');
+	}
+	return (n);
 }
 
 void print_number(char *input, size_t nb)

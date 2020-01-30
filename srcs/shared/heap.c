@@ -37,10 +37,52 @@ inline t_heap *unshift_new_heap(t_heap **head, void *memory, size_t size)
 	return unshift_heap(head, new);
 }
 
+#include "debug.h"
 extern size_t get_heap_size(t_config_type type)
 {
 	t_config config;
 
 	config = get_config(type);
 	return config.heap_size;
+}
+
+#include "chunk.h"
+extern void print_heap(t_heap *heap)
+{
+	t_chunk *chunk;
+
+	print_string("heap(");
+	ft_putnbr(heap->size);
+	print_string("): ");
+	ft_putnbr((size_t)heap);
+	print_string("|");
+	ft_putnbr((size_t)((size_t)heap + heap->size));
+	print_string(";");
+	chunk = get_first_chunk(heap);
+	ft_putnbr((size_t)chunk);
+	print_string("(");
+	ft_putnbr(chunk->forward);
+	print_string("-");
+	ft_putnbr(chunk->free);
+	print_string(")");
+	chunk = get_next_chunk(chunk);
+	while (chunk_is_on_heap(heap, chunk))
+	{
+		print_string("->");
+		print_string("[");
+		ft_putnbr(chunk_is_on_heap(heap, chunk));
+		print_string("]");
+		ft_putnbr((size_t)chunk);
+		print_string("(");
+		ft_putnbr(chunk->forward);
+		print_string("-");
+		ft_putnbr(chunk->free);
+		print_string(")");
+		chunk = get_next_chunk(chunk);
+	}
+	ft_putnbr((size_t)chunk);
+	// print_string("(");
+	// ft_putnbr(chunk->forward);
+	// print_string(")");
+	print_string("\n");
 }

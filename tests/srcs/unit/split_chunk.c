@@ -1,12 +1,13 @@
 #include "chunk.h"
 #include "memory.h"
 #include "test.h"
+#include "debug.h"
 
 t_chunk *dummy_new_chunk(size_t size)
 {
     void *mem = get_some_memory(size);
     t_chunk *chk = (t_chunk *)mem;
-    chk->forward = 4096;
+    chk->forward = size;
     chk->free = 0;
     return chk;
 }
@@ -85,5 +86,20 @@ void test_split_chunk(void)
     // {
     //     putstr(" OK");
     // }
+    putstr("\n");
+
+    //too little
+    putstr("Split too little:");
+    t_chunk *normal = dummy_new_chunk(32 * 4096);
+    size_t little = normal->forward - (get_config(2).chunk_min + sizeof(t_chunk)) + 1;
+    t_chunk *notsplit = split_chunk(normal, 2, little);
+    if (notsplit->forward != 32 * 4096)
+    {
+        return putstr(" NO\n");
+    }
+    else
+    {
+        putstr(" OK");
+    }
     putstr("\n");
 }
