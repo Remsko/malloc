@@ -15,12 +15,8 @@ void ft_putnbr(size_t nb)
 
 void print_number(char *input, size_t nb)
 {
-	char str[31];
-
-	bzero(str, 30);
 	print_string(input);
 	print_string(": ");
 	ft_putnbr(nb);
-	print_string(str);
 	print_string(";\n");
 }

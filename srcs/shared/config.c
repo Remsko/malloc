@@ -55,11 +55,6 @@ extern t_config_type get_config_type(size_t size)
 	while (type < TYPES)
 	{
 		config = get_config(type);
-<<<<<<< Updated upstream
-=======
-		//print_number("size", size);
-		//print_number("chunk max", config.chunk_max);
->>>>>>> Stashed changes
 		if (size <= config.chunk_max)
 			break;
 		type++;
