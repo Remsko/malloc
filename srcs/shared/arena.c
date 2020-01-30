@@ -50,7 +50,6 @@ extern t_heap *arena_unshift(t_config_type type, size_t size)
 	}
 	else
 		total = size;
-
 	memory = get_some_memory(total);
 	head = get_arena_heap_head(type);
 	if (memory == NULL || head == NULL)

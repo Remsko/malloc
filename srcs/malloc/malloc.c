@@ -15,22 +15,19 @@ t_chunk *get_free_chunk(size_t size)
 	type = get_config_type(size);
 	if (type == LARGE)
 		new_alloc = size;
-	// else if ((chunk = search_free_chunk(type, size)))
-	// {
-	// 	split_chunk(chunk, type, size);
-	// 	return chunk;
-	// }
+	else if ((chunk = search_free_chunk(type, size)))
+	{
+		split_chunk(chunk, type, size);
+		return chunk;
+	}
 	else
 		new_alloc = get_heap_size(type);
 	heap = arena_unshift(type, new_alloc);
 	if (heap == NULL)
 		return NULL;
-	//print_heap(heap);
 	chunk = get_first_chunk(heap);
 	chunk->forward = heap->size - sizeof(t_heap);
-	//print_heap(heap);
 	split_chunk(chunk, type, size);
-	//print_heap(heap);
 	return chunk;
 }
 
