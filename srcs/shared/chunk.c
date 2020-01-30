@@ -86,10 +86,13 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 	while ((*heap) != NULL)
 	{
 		chunk = get_first_chunk(*heap);
-		while (chunk_is_on_heap(*heap, chunk) && chunk->forward != 0)
+		while (chunk_is_on_heap(*heap, chunk))
 		{
 			if (chunk_is_available(chunk, size))
+			{
+				print_string("F");
 				return chunk;
+			}
 			chunk = get_next_chunk(chunk);
 		}
 		heap = &(*heap)->next;
