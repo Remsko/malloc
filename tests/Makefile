@@ -21,10 +21,6 @@ SRC_NAME += simple.c
 SRC_NAME += write.c
 SRC_NAME += zero.c
 
-SRC_SUB += unit
-SRC_NAME += split_chunk.c
-SRC_NAME += search_chunk.c
-
 vpath %.c $(SRC_PATH) $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
 OBJ_PATH = obj
@@ -34,8 +30,12 @@ OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 LIB_PATH = ../
 LIB = $(LIB_PATH)libft_malloc.so
 CFLAGS += -I$(LIB_PATH)incs
-LDFLAGS += -L./$(LIB_PATH) -lft_malloc
 
+ifeq ($(UNAME_S),Darwin)
+	LDFLAGS += -L./$(LIB_PATH) -lft_malloc
+else 
+	LDFLAGS += -L $(LIB_PATH)
+endif
 
 all: $(NAME)
 

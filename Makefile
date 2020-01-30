@@ -2,7 +2,6 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-UNAME_S := $(shell uname -s)
 NAME = libft_malloc_$(HOSTTYPE).so
 LINK = libft_malloc.so
 CC = gcc
@@ -14,7 +13,6 @@ INC_NAME += malloc.h
 INC_NAME += arena.h
 INC_NAME += heap.h
 INC_NAME += chunk.h
-INC_NAME += debug.h
 
 CFLAGS = -Wall -Werror -Wextra
 INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
@@ -33,17 +31,20 @@ SRC_NAME += arena.c
 SRC_NAME += chunk.c
 SRC_NAME += config.c
 SRC_NAME += heap.c
-SRC_NAME += memory.c
 
-SRC_SUB += debug
-SRC_NAME += print_number.c
-SRC_NAME += print_string.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
 OBJ_PATH = obj
 OBJ_NAME = $(SRC_NAME:%.c=%.o)
 OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME)) 
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	REPLACE := ./run.sh ./test
+else 
+	REPLACE := LD_PRELOAD=./$(LINK) ./test
+endif
 
 all: $(NAME)
 
@@ -69,11 +70,7 @@ re: fclean all
 
 test: $(NAME)
 	make re -C tests
-    ifeq ($(UNAME_S),Darwin)
-		mv tests/test .
-		./run.sh ./test
-	else 
-		LD_PRELOAD=./$(LINK) ./tests/test
-    endif
+	mv ./tests/test .
+	LD_PRELOAD=./$(LINK) ./test
 
 .PHONY: all clean fclean re test

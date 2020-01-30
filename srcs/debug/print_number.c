@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <unistd.h>
 
-void putchar(char c)
+void ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
@@ -13,11 +13,11 @@ int ft_putnbr(size_t n)
 	if (n >= 10)
 	{
 		ft_putnbr(n / 10);
-		putchar(n % 10 + '0');
+		ft_putchar(n % 10 + '0');
 	}
 	if (n < 10)
 	{
-		putchar(n % 10 + '0');
+		ft_putchar(n % 10 + '0');
 	}
 	return (n);
 }

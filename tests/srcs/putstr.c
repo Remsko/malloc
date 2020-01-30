@@ -6,15 +6,21 @@ void putstr(char *str)
 	write(1, str, strlen(str));
 }
 
-void putnbr(size_t size)
+void printchar(char c)
 {
-	if (size > 9)
+	write(1, &c, 1);
+}
+
+size_t putnbr(size_t n)
+{
+	if (n >= 10)
 	{
-		putnbr(size / 10);
-		putnbr(size % 10);
+		putnbr(n / 10);
+		printchar(n % 10 + '0');
 	}
-	else
+	if (n < 10)
 	{
-		write(1, (char[1]){size + '0'}, 1);
+		printchar(n % 10 + '0');
 	}
+	return (n);
 }
