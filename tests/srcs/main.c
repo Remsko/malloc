@@ -2,12 +2,12 @@
 
 int main(void)
 {
-	//test_search_chunk();
+	test_search_chunk();
 
-	// test_free_null();
-	// test_oversized_malloc();
-	// test_zero_malloc();
-	// test_zero_malloc_free();
+	test_free_null();
+	test_oversized_malloc();
+	test_zero_malloc();
+	test_zero_malloc_free();
 
 	test_simple(5);
 	test_simple(500);
@@ -19,10 +19,12 @@ int main(void)
 	test_simple(4096 * 8);
 	test_simple(4096 * 16);
 
-	// for (int i = 0; i < 1000; i++)
-	// {
-	// 	test_simple(450);
-	// }
+	for (int i = 0; i < 1000; i++)
+	{
+		test_simple(50);
+		test_simple(500);
+		test_simple(5000);
+	}
 
 	test_simple_free(5);
 	test_simple_free(500);

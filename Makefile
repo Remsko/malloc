@@ -9,10 +9,14 @@ RM = rm -rf
 
 INC_PATH += ./incs
 
-INC_NAME += malloc.h
+INC_NAME += align.h
 INC_NAME += arena.h
-INC_NAME += heap.h
 INC_NAME += chunk.h
+INC_NAME += config.h
+INC_NAME += debug.h
+INC_NAME += heap.h
+INC_NAME += malloc.h
+INC_NAME += memory.h
 
 CFLAGS = -Wall -Werror -Wextra
 INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
@@ -31,7 +35,11 @@ SRC_NAME += arena.c
 SRC_NAME += chunk.c
 SRC_NAME += config.c
 SRC_NAME += heap.c
+SRC_NAME += memory.c
 
+SRC_SUB += debug
+SRC_NAME += print_number.c
+SRC_NAME += print_string.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
@@ -71,6 +79,6 @@ re: fclean all
 test: $(NAME)
 	make re -C tests
 	mv ./tests/test .
-	LD_PRELOAD=./$(LINK) ./test
+	$(REPLACE)
 
 .PHONY: all clean fclean re test
