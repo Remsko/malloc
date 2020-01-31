@@ -12,6 +12,8 @@ void test_write(size_t size)
 		return putstr("FAIL\n");
 	cpy[size - 1] = '\0';
 	strcpy(ptr, cpy);
+	if (strcmp(ptr, cpy))
+		return putstr("FAIL\n");
 	putstr("OK\n");
 }
 
@@ -26,6 +28,8 @@ void test_write_free(size_t size)
 		return putstr("FAIL\n");
 	cpy[size - 1] = '\0';
 	strcpy(ptr, cpy);
+	if (strcmp(ptr, cpy))
+		return putstr("FAIL\n");
 	free(ptr);
 	putstr("OK\n");
 }

@@ -1,7 +1,7 @@
 #ifndef HEAP_H
 #define HEAP_H
 
-#include <stddef.h>
+#include "config.h"
 
 typedef struct s_heap
 {
@@ -13,5 +13,7 @@ t_heap *get_heap(void *alloc);
 t_heap *new_heap(void *alloc, size_t alloc_size);
 t_heap *unshift_heap(t_heap **head, t_heap *new);
 t_heap *unshift_new_heap(t_heap **head, void *alloc, size_t alloc_size);
+size_t get_heap_size(t_config_type type);
+void print_heap(t_heap *heap);
 
 #endif

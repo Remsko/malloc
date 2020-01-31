@@ -10,3 +10,7 @@ void *get_some_memory(size_t size)
 		return NULL;
 	return (memory);
 }
+
+// void *release_memory(size_t size)
+// {
+// }

@@ -2,6 +2,7 @@
 #include "heap.h"
 #include "arena.h"
 #include "config.h"
+#include "debug.h"
 #include <stdbool.h>
 
 inline t_chunk *get_chunk(void *start)
@@ -44,11 +45,13 @@ inline t_chunk *get_first_chunk(t_heap *heap)
 	return (void *)heap + sizeof(t_heap);
 }
 
+#include <assert.h>
 extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_config config;
 	size_t rest;
 
+	assert(size <= chunk->forward);
 	config = get_config(type);
 	rest = chunk->forward - size;
 	if (sizeof(t_chunk) + config.chunk_min <= rest)
@@ -61,30 +64,35 @@ extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 
 inline bool chunk_is_available(t_chunk *chunk, size_t s)
 {
-	return chunk->free && chunk->forward <= s;
+	return chunk->free && s <= chunk->forward;
 }
 
-inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
+bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 {
-	return (void *)heap + heap->size > (void *)chunk;
+	void *start;
+	void *end;
+
+	start = (void *)heap;
+	end = (void *)heap + heap->size;
+	return ((void *)chunk > start && (void *)chunk < end);
 }
 
 extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
-	t_heap *heap;
+	t_heap **heap;
 	t_chunk *chunk;
 
-	heap = *(get_arena_heap_head(type));
-	while (heap != NULL)
+	heap = get_arena_heap_head(type);
+	while ((*heap) != NULL)
 	{
-		chunk = get_first_chunk(heap);
-		while (chunk_is_on_heap(heap, chunk))
+		chunk = get_first_chunk(*heap);
+		while (chunk_is_on_heap(*heap, chunk))
 		{
 			if (chunk_is_available(chunk, size))
 				return chunk;
 			chunk = get_next_chunk(chunk);
 		}
-		heap = heap->next;
+		heap = &(*heap)->next;
 	}
 	return NULL;
 }

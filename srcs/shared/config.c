@@ -1,5 +1,6 @@
 #include "config.h"
 #include <unistd.h>
+#include "debug.h"
 
 static t_config config_tiny()
 {
@@ -20,19 +21,16 @@ static t_config config_small()
 	xpages = getpagesize() * 32;
 	return (t_config){
 		.heap_size = xpages,
-		.chunk_min = (xpages / 8) / 128,
+		.chunk_min = config_tiny().chunk_max,
 		.chunk_max = xpages / 128,
 	};
 }
 
 static t_config config_large()
 {
-	size_t small_xpages;
-
-	small_xpages = getpagesize() * 32;
 	return (t_config){
 		.heap_size = (size_t)-1,
-		.chunk_min = small_xpages / 128,
+		.chunk_min = config_small().chunk_max,
 		.chunk_max = (size_t)-1};
 }
 
@@ -57,7 +55,7 @@ extern t_config_type get_config_type(size_t size)
 	while (type < TYPES)
 	{
 		config = get_config(type);
-		if (size < config.chunk_max)
+		if (size <= config.chunk_max)
 			break;
 		type++;
 	}
