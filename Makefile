@@ -40,6 +40,7 @@ SRC_NAME += memory.c
 SRC_SUB += debug
 SRC_NAME += print_number.c
 SRC_NAME += print_string.c
+SRC_NAME += print_heap.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
