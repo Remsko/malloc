@@ -45,7 +45,47 @@ void *malloc(size_t size)
 	chunk = get_free_chunk(chunk_size);
 	if (chunk == NULL)
 		return NULL;
+	//print_number("m chk", (size_t)chunk);
 	chunk->free = false;
 	payload = get_chunk_payload(chunk);
+	//print_number("m payload chk", (size_t)((void *)chunk + sizeof(t_chunk)));
+	return payload;
+}
+
+void *calloc(size_t count, size_t size)
+{
+	void *payload;
+
+	payload = malloc(count * size);
+	//print_number("c chk", (size_t)(payload - sizeof(t_chunk)));
+	return payload;
+}
+
+void *valloc(size_t size)
+{
+	void *payload;
+
+	payload = malloc(page_align(size));
+	//print_number("v chk", (size_t)(payload - sizeof(t_chunk)));
+	return payload;
+}
+
+void *realloc(void *ptr, size_t size)
+{
+	void *payload;
+	(void)ptr;
+	payload = malloc(size);
+	//print_number("r chk", (size_t)(payload - sizeof(t_chunk)));
+	//free(ptr);
+	return payload;
+}
+
+void *reallocf(void *ptr, size_t size)
+{
+	void *payload;
+	(void)ptr;
+	payload = malloc(size);
+	//print_number("rf chk", (size_t)(payload - sizeof(t_chunk)));
+	//free(ptr);
 	return payload;
 }

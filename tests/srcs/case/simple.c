@@ -9,6 +9,7 @@ void test_simple(size_t size)
 	ptr = malloc(size);
 	if (!ptr)
 		return putstr("FAIL\n");
+	*(char *)ptr = 'a';
 	putstr("OK\n");
 }
 
@@ -20,6 +21,7 @@ void test_simple_free(size_t size)
 	ptr = malloc(size);
 	if (!ptr)
 		return putstr("FAIL\n");
+	*(char *)ptr = 'a';
 	free(ptr);
 	putstr("OK\n");
 }

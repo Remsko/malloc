@@ -2,12 +2,12 @@
 
 int main(void)
 {
-	test_search_chunk();
+	// test_search_chunk();
 
-	test_free_null();
-	test_oversized_malloc();
-	test_zero_malloc();
-	test_zero_malloc_free();
+	// test_free_null();
+	// test_oversized_malloc();
+	// test_zero_malloc();
+	// test_zero_malloc_free();
 
 	test_simple(5);
 	test_simple(500);
