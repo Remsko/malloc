@@ -42,7 +42,7 @@ inline size_t get_payload_size(t_chunk *chunk)
 
 inline t_chunk *get_first_chunk(t_heap *heap)
 {
-	return (void *)heap + sizeof(t_heap);
+	return get_chunk((void *)heap + sizeof(t_heap));
 }
 
 #include <assert.h>
@@ -67,7 +67,7 @@ inline bool chunk_is_available(t_chunk *chunk, size_t s)
 	return chunk->free && s <= chunk->forward;
 }
 
-bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
+inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 {
 	void *start;
 	void *end;
