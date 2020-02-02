@@ -44,7 +44,7 @@ extern t_heap *arena_unshift(t_config_type type, size_t size)
 
 	if (type == LARGE)
 	{
-		total = size + sizeof(t_heap);
+		total = page_align(size + sizeof(t_heap));
 		if (total < size)
 			return NULL;
 	}

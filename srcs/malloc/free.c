@@ -1,7 +1,7 @@
 #include "chunk.h"
 #include "malloc.h"
 #include "arena.h"
-#include "debug.h"
+#include "memory.h"
 
 void free(void *ptr)
 {
@@ -18,6 +18,6 @@ void free(void *ptr)
 	//merge_chunk(chunk);
 	if (heap->size - sizeof(t_heap) == chunk->forward)
 	{
-		;
-	} //release_memory(heap, heap->size);
+		release_some_memory((void *)heap, heap->size);
+	}
 }
