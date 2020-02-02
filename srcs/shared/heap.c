@@ -1,5 +1,7 @@
 #include "heap.h"
 #include "config.h"
+#include "chunk.h"
+#include "arena.h"
 
 inline t_heap *get_heap(void *memory)
 {
@@ -43,4 +45,22 @@ extern size_t get_heap_size(t_config_type type)
 
 	config = get_config(type);
 	return config.heap_size;
+}
+
+extern t_heap *search_heap(t_chunk *chunk)
+{
+	t_heap **heap;
+	t_config_type type;
+
+	type = get_config_type(chunk->forward);
+	heap = get_arena_heap_head(type);
+	if (heap == NULL)
+		return NULL;
+	while ((*heap) != NULL)
+	{
+		if (chunk_is_on_heap(*heap, chunk))
+			return *heap;
+		heap = &(*heap)->next;
+	}
+	return NULL;
 }

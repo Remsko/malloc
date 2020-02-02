@@ -52,7 +52,7 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	REPLACE := ./run.sh ./test
 else 
-	REPLACE := LD_PRELOAD=./$(LINK) ./test
+	REPLACE := LD_LIBRARY_PATH=. ./test
 endif
 
 all: $(NAME)

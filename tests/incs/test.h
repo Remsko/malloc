@@ -17,5 +17,6 @@ void test_zero_malloc(void);
 void test_zero_malloc_free(void);
 void test_split_chunk(void);
 void test_search_chunk(void);
+void test_search_heap(void);
 
 #endif

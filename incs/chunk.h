@@ -23,5 +23,6 @@ t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size);
 t_chunk *search_free_chunk(t_config_type type, size_t size);
 bool chunk_is_available(t_chunk *chunk, size_t s);
 bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk);
+t_heap *search_heap(t_chunk *chunk);
 
 #endif
