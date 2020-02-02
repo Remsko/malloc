@@ -34,19 +34,13 @@ OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 LIB_PATH = ../
 LIB = $(LIB_PATH)libft_malloc.so
 CFLAGS += -I$(LIB_PATH)incs
-
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Darwin)
-	LDFLAGS += -L./$(LIB_PATH) -lft_malloc
-else 
-	LDFLAGS += -L $(LIB_PATH)
-endif
+LDFLAGS += -L./$(LIB_PATH) -lft_malloc
 
 all: $(NAME)
 
 
 $(NAME): $(OBJ)
-	$(CC) -o $@ $^ $(LDFLAGS)
+	$(CC) -o $@ $^ $(LDFLAGS) 
 
 $(OBJ): $(INC) | $(OBJ_PATH)
 $(OBJ): $(OBJ_PATH)/%.o: %.c
