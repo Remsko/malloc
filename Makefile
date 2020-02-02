@@ -28,6 +28,7 @@ SRC_PATH = srcs/
 SRC_SUB += malloc
 SRC_NAME += malloc.c
 SRC_NAME += free.c
+SRC_NAME += realloc.c
 
 SRC_SUB += shared
 SRC_NAME += align.c
@@ -52,7 +53,7 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	REPLACE := ./run.sh ./test
 else 
-	REPLACE := LD_LIBRARY_PATH=. ./test
+	REPLACE := LD_PRELOAD=./libft_malloc.so LD_LIBRARY_PATH=. ./test
 endif
 
 all: $(NAME)

@@ -28,8 +28,14 @@ void free(void *ptr)
 	heap = search_heap(chunk);
 	if (heap == NULL)
 		return;
+	//check_chunk;
 	chunk->free = true;
+	t_config_type type = get_config_type(chunk->forward);
+	t_heap **head = get_arena_heap_head(type);
 	merge_chunk(heap, chunk);
 	if (heap->size - sizeof(t_heap) == chunk->forward)
-		release_some_memory((void *)heap, heap->size);
+	{
+		delete_heap(head, heap);
+		//release_some_memory((void *)heap, heap->size);
+	}
 }
