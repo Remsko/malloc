@@ -3,6 +3,20 @@
 #include "arena.h"
 #include "memory.h"
 
+void merge_chunk(t_heap *heap, t_chunk *chunk)
+{
+	t_chunk *next;
+
+	while (1)
+	{
+		next = get_next_chunk(chunk);
+		if (chunk_is_on_heap(heap, next) && next->free)
+			chunk->forward += next->forward;
+		else
+			break;
+	}
+}
+
 void free(void *ptr)
 {
 	t_heap *heap;
@@ -15,9 +29,7 @@ void free(void *ptr)
 	if (heap == NULL)
 		return;
 	chunk->free = true;
-	//merge_chunk(chunk);
+	merge_chunk(heap, chunk);
 	if (heap->size - sizeof(t_heap) == chunk->forward)
-	{
 		release_some_memory((void *)heap, heap->size);
-	}
 }
