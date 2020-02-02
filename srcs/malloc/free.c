@@ -3,22 +3,6 @@
 #include "arena.h"
 #include "debug.h"
 
-t_heap *search_heap(t_chunk *chunk)
-{
-	t_heap **heap;
-	t_config_type type;
-
-	type = get_config_type(chunk->forward);
-	heap = get_arena_heap_head(type);
-	while ((*heap) != NULL)
-	{
-		if (chunk_is_on_heap(*heap, chunk))
-			return *heap;
-		heap = &(*heap)->next;
-	}
-	return NULL;
-}
-
 void free(void *ptr)
 {
 	t_heap *heap;
@@ -33,5 +17,7 @@ void free(void *ptr)
 	chunk->free = true;
 	//merge_chunk(chunk);
 	if (heap->size - sizeof(t_heap) == chunk->forward)
-		; //release_memory(heap, heap->size);
+	{
+		;
+	} //release_memory(heap, heap->size);
 }

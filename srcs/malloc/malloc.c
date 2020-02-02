@@ -45,9 +45,7 @@ void *malloc(size_t size)
 	chunk = get_free_chunk(chunk_size);
 	if (chunk == NULL)
 		return NULL;
-	print_number("m chk", (size_t)chunk);
 	chunk->free = false;
 	payload = get_chunk_payload(chunk);
-	print_number("m payload chk", (size_t)((void *)chunk + sizeof(t_chunk)));
 	return payload;
 }
