@@ -10,19 +10,19 @@ t_chunk *get_free_chunk(size_t chunk_size)
 	t_heap *heap;
 	t_chunk *chunk;
 	t_config_type type;
-	size_t heap_size;
+	size_t new_heap_size;
 
 	type = get_config_type(chunk_size);
 	if (type == LARGE)
-		heap_size = chunk_size;
+		new_heap_size = chunk_size;
 	else if ((chunk = search_free_chunk(type, chunk_size)))
 	{
 		split_chunk(chunk, type, chunk_size);
 		return chunk;
 	}
 	else
-		heap_size = get_heap_size(type);
-	heap = arena_unshift(type, heap_size);
+		new_heap_size = get_heap_size(type);
+	heap = arena_unshift(type, new_heap_size);
 	if (heap == NULL)
 		return NULL;
 	chunk = get_first_chunk(heap);
