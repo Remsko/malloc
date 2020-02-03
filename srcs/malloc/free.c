@@ -17,6 +17,21 @@ void merge_chunk(t_heap *heap, t_chunk *chunk)
 	}
 }
 
+bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
+{
+	t_chunk *compare;
+
+	compare = get_first_chunk(heap);
+	while (chunk_is_on_heap(heap, compare))
+	{
+		if (compare == search)
+			return false;
+		compare = get_next_chunk(compare);
+	}
+	return true;
+}
+
+#include "debug.h"
 void free(void *ptr)
 {
 	t_heap *heap;
@@ -28,7 +43,8 @@ void free(void *ptr)
 	heap = search_heap(chunk);
 	if (heap == NULL)
 		return;
-	//check_chunk;
+	if (chunk_is_corrupt(heap, chunk))
+		return;
 	chunk->free = true;
 	t_config_type type = get_config_type(chunk->forward);
 	t_heap **head = get_arena_heap_head(type);
@@ -36,6 +52,6 @@ void free(void *ptr)
 	if (heap->size - sizeof(t_heap) == chunk->forward)
 	{
 		delete_heap(head, heap);
-		//release_some_memory((void *)heap, heap->size);
+		release_some_memory((void *)heap, heap->size);
 	}
 }

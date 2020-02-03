@@ -28,7 +28,9 @@ SRC_PATH = srcs/
 SRC_SUB += malloc
 SRC_NAME += malloc.c
 SRC_NAME += free.c
-SRC_NAME += realloc.c
+# SRC_NAME += calloc.c
+# SRC_NAME += valloc.c
+# SRC_NAME += realloc.c
 
 SRC_SUB += shared
 SRC_NAME += align.c

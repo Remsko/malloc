@@ -22,6 +22,14 @@ void multiple(void)
 	putstr(" OK\n");
 }
 
+void corrupt(void)
+{
+	putstr("Corrupt:");
+	void *ptr = malloc(50);
+	free(ptr + 5);
+	putstr(" OK\n");
+}
+
 int main(void)
 {
 	test_search_chunk();
@@ -59,6 +67,7 @@ int main(void)
 	test_write_free(500000);
 
 	multiple();
+	corrupt();
 
 	return 0;
 }
