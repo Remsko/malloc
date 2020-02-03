@@ -2,6 +2,7 @@
 
 void multiple(void)
 {
+	putstr("Multiple:");
 	void *test1[250];
 	void *test2[250];
 	void *test3[250];
@@ -18,6 +19,15 @@ void multiple(void)
 		free(test2[i]);
 		free(test3[i]);
 	}
+	putstr(" OK\n");
+}
+
+void corrupt(void)
+{
+	putstr("Corrupt:");
+	void *ptr = malloc(50);
+	free(ptr + 5);
+	putstr(" OK\n");
 }
 
 int main(void)
@@ -55,6 +65,9 @@ int main(void)
 	test_write_free(5000);
 	test_write_free(50000);
 	test_write_free(500000);
+
+	multiple();
+	corrupt();
 
 	return 0;
 }

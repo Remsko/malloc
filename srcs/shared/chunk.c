@@ -83,6 +83,8 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 	t_chunk *chunk;
 
 	heap = get_arena_heap_head(type);
+	if (heap == NULL)
+		return NULL;
 	while ((*heap) != NULL)
 	{
 		chunk = get_first_chunk(*heap);

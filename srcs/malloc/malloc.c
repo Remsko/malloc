@@ -31,7 +31,7 @@ t_chunk *get_free_chunk(size_t chunk_size)
 	return chunk;
 }
 
-void *dynalloc(size)
+void *dynalloc(size_t size)
 {
 	t_chunk *chunk;
 	void *payload;

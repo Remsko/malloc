@@ -1,6 +1,7 @@
 #include <sys/mman.h>
 #include <stddef.h>
 #include <assert.h>
+#include "debug.h"
 
 void *get_some_memory(size_t size)
 {
@@ -12,10 +13,7 @@ void *get_some_memory(size_t size)
 	return (memory);
 }
 
-void *release_some_memory(void *memory, size_t size)
+void release_some_memory(void *memory, size_t size)
 {
-	int ret;
-
-	ret = munmap(memory, size);
-	assert(ret != 0);
+	munmap(memory, size);
 }

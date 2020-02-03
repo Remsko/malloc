@@ -47,20 +47,28 @@ extern size_t get_heap_size(t_config_type type)
 	return config.heap_size;
 }
 
+#include "debug.h"
 extern t_heap *search_heap(t_chunk *chunk)
 {
-	t_heap **heap;
+	t_heap **heap[TYPES];
 	t_config_type type;
 
-	type = get_config_type(chunk->forward);
-	heap = get_arena_heap_head(type);
-	if (heap == NULL)
-		return NULL;
-	while ((*heap) != NULL)
+	heap[TINY] = get_arena_heap_head(0);
+	heap[SMALL] = get_arena_heap_head(1);
+	heap[LARGE] = get_arena_heap_head(2);
+	while (*heap[TINY] || *heap[SMALL] || *heap[LARGE])
 	{
-		if (chunk_is_on_heap(*heap, chunk))
-			return *heap;
-		heap = &(*heap)->next;
+		type = 0;
+		while (type < TYPES)
+		{
+			if (*heap[type])
+			{
+				if (chunk_is_on_heap(*heap[type], chunk))
+					return *heap[type];
+				heap[type] = &(*heap[type])->next;
+			}
+			type++;
+		}
 	}
 	return NULL;
 }
