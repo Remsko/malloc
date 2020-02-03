@@ -1,58 +1,35 @@
-<<<<<<< HEAD
-#include "malloc.h"
-#include <string.h>
-#include "debug.h"
+#include "chunk.h"
+#include "align.h"
 
 void *realloc(void *ptr, size_t size)
 {
-	size_t new = size;
-	size_t old = size; //chunk->forward;
-	(void)new;
-	(void)old;
-	(void)ptr;
-	void *re = malloc(size);
-	if (re)
-	{
-		; //memcpy(re, ptr, (new < old) ? new : old);
-	}
-	return re;
-=======
-#include "chunk.h"
-#include "malloc.h"
-#include "arena.h"
-#include "debug.h"
-
-void	*realloc(void *ptr, size_t size){
 	t_chunk *old_chunk;
 	size_t old_chunk_size;
 
-	t_chunk *new_chunk;
+	//t_chunk *new_chunk = NULL;
 	size_t new_chunk_size;
 
 	// Check entries
 	if (ptr == NULL || size <= 0)
-		return;
-	
+		return NULL;
+
 	// Format datas
 	old_chunk = get_chunk_from_payload(ptr);
 	old_chunk_size = old_chunk->forward;
-	
+
 	new_chunk_size = memory_align(size + sizeof(t_chunk));
 	if (new_chunk_size < size)
 		return NULL;
-	
+
 	if (old_chunk_size > new_chunk_size)
 	{
-		return;
+		return NULL;
 	}
 
 	// Malloc new chunk
-	
-	
 
 	// Copy old chunk's datas
 
 	// Free old chunk
-	
->>>>>>> feat(realloc): started realloc
+	return NULL;
 }
