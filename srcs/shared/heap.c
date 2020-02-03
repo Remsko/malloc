@@ -52,22 +52,23 @@ extern t_heap *search_heap(t_chunk *chunk)
 {
 	t_heap **heap[TYPES];
 	t_config_type type;
+	bool forward;
 
-	heap[TINY] = get_arena_heap_head(0);
-	heap[SMALL] = get_arena_heap_head(1);
-	heap[LARGE] = get_arena_heap_head(2);
-	while (*heap[TINY] || *heap[SMALL] || *heap[LARGE])
+	for (type = 0; type < TYPES; type++)
+		heap[type] = get_arena_heap_head(type);
+	forward = true;
+	while (forward == true)
 	{
-		type = 0;
-		while (type < TYPES)
+		forward = false;
+		for (type = 0; type < TYPES; type++)
 		{
 			if (*heap[type])
 			{
+				forward = true;
 				if (chunk_is_on_heap(*heap[type], chunk))
 					return *heap[type];
 				heap[type] = &(*heap[type])->next;
 			}
-			type++;
 		}
 	}
 	return NULL;
