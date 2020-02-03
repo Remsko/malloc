@@ -58,6 +58,8 @@ extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 	{
 		new_chunk((void *)chunk, size);
 		new_chunk((void *)chunk + size, rest);
+		// print_number("Splitted", (size_t)chunk + size);
+		// print_number("NEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXT", (size_t)get_next_chunk(chunk) + get_next_chunk(chunk)->forward);
 	}
 	return chunk;
 }
@@ -74,6 +76,8 @@ inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 
 	start = (void *)heap;
 	end = (void *)heap + heap->size;
+	// print_number("start",(size_t)start);
+	// print_number("end",(size_t)end);
 	return ((void *)chunk > start && (void *)chunk < end);
 }
 

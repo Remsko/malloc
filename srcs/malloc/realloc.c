@@ -1,6 +1,7 @@
 #include "chunk.h"
 #include "align.h"
 #include "malloc.h"
+#include "debug.h"
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
@@ -24,8 +25,8 @@ void *realloc(void *ptr, size_t size)
 	size_t new_chunk_size;
 
 	// Check entries
-	if (ptr == NULL || size <= 0)
-		return NULL;
+	if (ptr == NULL)
+		return malloc(size);
 
 	// Format datas
 	old_chunk = get_chunk_from_payload(ptr);
@@ -40,10 +41,13 @@ void *realloc(void *ptr, size_t size)
 	new_chunk = get_chunk_from_payload(malloc(new_chunk_size));
 
 	// Copy old chunk's datas
-	new_chunk = ft_memcpy((void *) new_chunk, (void *) old_chunk, old_chunk_size);
-	new_chunk->forward = new_chunk_size;
+	print_number("size",new_chunk->forward);
+	new_chunk = ft_memcpy((void *) new_chunk + sizeof(t_chunk), (void *) old_chunk + sizeof(t_chunk), old_chunk_size - sizeof(t_chunk));
+	print_number("size",new_chunk->forward);
+	
+	// new_chunk->forward = new_chunk_size;
 
 	// Free old chunk
 	free(old_chunk + sizeof(t_chunk));
-	return NULL;
+	return get_chunk_payload(new_chunk);
 }
