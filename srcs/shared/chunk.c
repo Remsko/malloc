@@ -37,7 +37,7 @@ inline t_chunk *new_chunk(void *start, size_t size)
 
 inline size_t get_chunk_size(t_chunk *chunk)
 {
-	return chunk->forward & ~16U;
+	return chunk->forward & ~16UL;
 }
 
 inline t_chunk *get_chunk_from_payload(void *payload)

@@ -17,10 +17,10 @@ void free(void *ptr)
 	if (chunk_is_corrupt(heap, chunk))
 		return;
 	set_chunk_free(chunk);
-	t_config_type type = get_config_type(chunk->forward);
+	t_config_type type = get_config_type(get_chunk_size(chunk));
 	t_heap **head = get_arena_heap_head(type);
 	merge_chunk(heap, chunk);
-	if (heap->size - sizeof(t_heap) == chunk->forward)
+	if (heap->size - sizeof(t_heap) == get_chunk_size(chunk))
 	{
 		delete_heap(head, heap);
 		release_some_memory((void *)heap, heap->size);
