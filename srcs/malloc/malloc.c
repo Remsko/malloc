@@ -4,6 +4,7 @@
 #include "arena.h"
 #include "chunk.h"
 #include "debug.h"
+#include <stdio.h>
 
 t_chunk *get_free_chunk(size_t chunk_size)
 {
@@ -47,6 +48,7 @@ void *dynalloc(size_t size)
 		return NULL;
 	chunk->free = false;
 	payload = get_chunk_payload(chunk);
+	print_number("yolo", (size_t)payload % 16);
 	return payload;
 }
 

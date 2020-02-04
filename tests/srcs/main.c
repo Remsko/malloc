@@ -30,8 +30,11 @@ void corrupt(void)
 	putstr(" OK\n");
 }
 
+#include "debug.h"
+#include "chunk.h"
 int main(void)
 {
+	print_number("sizeof chunk", sizeof(t_chunk));
 	test_search_chunk();
 	test_search_heap();
 
