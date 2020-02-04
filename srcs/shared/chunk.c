@@ -98,3 +98,31 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 	}
 	return NULL;
 }
+
+extern void merge_chunk(t_heap *heap, t_chunk *chunk)
+{
+	t_chunk *next;
+
+	while (1)
+	{
+		next = get_next_chunk(chunk);
+		if (chunk_is_on_heap(heap, next) && next->free)
+			chunk->forward += next->forward;
+		else
+			break;
+	}
+}
+
+extern bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
+{
+	t_chunk *compare;
+
+	compare = get_first_chunk(heap);
+	while (chunk_is_on_heap(heap, compare))
+	{
+		if (compare == search)
+			return false;
+		compare = get_next_chunk(compare);
+	}
+	return true;
+}

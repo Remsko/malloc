@@ -1,7 +1,6 @@
 #include <sys/mman.h>
 #include <stddef.h>
 #include <assert.h>
-#include "debug.h"
 
 void *get_some_memory(size_t size)
 {
