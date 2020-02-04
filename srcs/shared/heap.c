@@ -47,7 +47,6 @@ extern size_t get_heap_size(t_config_type type)
 	return config.heap_size;
 }
 
-#include "debug.h"
 extern t_heap *search_heap(t_chunk *chunk)
 {
 	t_heap **heap[TYPES];
@@ -62,7 +61,7 @@ extern t_heap *search_heap(t_chunk *chunk)
 		forward = false;
 		for (type = 0; type < TYPES; type++)
 		{
-			if (*heap[type])
+			if (heap[type] && *heap[type])
 			{
 				forward = true;
 				if (chunk_is_on_heap(*heap[type], chunk))

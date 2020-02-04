@@ -48,11 +48,14 @@ void *dynalloc(size_t size)
 		return NULL;
 	chunk->free = false;
 	payload = get_chunk_payload(chunk);
-	print_number("yolo", (size_t)payload % 16);
 	return payload;
 }
 
 void *malloc(size_t size)
 {
-	return dynalloc(size);
+	//print_string("test1");
+	void *ptr = dynalloc(size);
+	//print_string("test2");
+	print_number("m", (size_t)ptr);
+	return ptr;
 }

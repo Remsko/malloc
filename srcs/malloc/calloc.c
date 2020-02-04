@@ -17,6 +17,7 @@ void *calloc(size_t count, size_t size)
 	void *ptr;
 	size_t total;
 
+	print_number("c", (size_t)ptr);
 	total = count * size;
 	if (total / size < count)
 		return NULL;
