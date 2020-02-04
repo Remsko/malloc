@@ -1,7 +1,6 @@
 #include "malloc.h"
 #include "align.h"
 
-#include "debug.h"
 void *valloc(size_t size)
 {
 	size_t xpages;

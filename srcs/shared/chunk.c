@@ -3,27 +3,27 @@
 #include "arena.h"
 #include <stdbool.h>
 
-inline void set_chunk_free(t_chunk *chunk)
+void set_chunk_free(t_chunk *chunk)
 {
 	chunk->forward |= FLAG_FREE;
 }
 
-inline void set_chunk_used(t_chunk *chunk)
+void set_chunk_used(t_chunk *chunk)
 {
 	chunk->forward &= ~FLAG_FREE;
 }
 
-inline bool is_chunk_free(t_chunk *chunk)
+bool is_chunk_free(t_chunk *chunk)
 {
 	return (bool)(chunk->forward & FLAG_FREE);
 }
 
-inline t_chunk *get_chunk(void *start)
+t_chunk *get_chunk(void *start)
 {
 	return (t_chunk *)start;
 }
 
-inline t_chunk *new_chunk(void *start, size_t size)
+t_chunk *new_chunk(void *start, size_t size)
 {
 	t_chunk *chunk;
 
@@ -33,38 +33,38 @@ inline t_chunk *new_chunk(void *start, size_t size)
 	return chunk;
 }
 
-inline size_t get_chunk_size(t_chunk *chunk)
+size_t get_chunk_size(t_chunk *chunk)
 {
 	return chunk->forward & ~(MEMORY_ALIGNMENT - 1);
 }
 
-inline t_chunk *get_chunk_from_payload(void *payload)
+t_chunk *get_chunk_from_payload(void *payload)
 {
 	return get_chunk(payload - sizeof(t_chunk));
 }
 
-inline t_chunk *get_next_chunk(t_chunk *chunk)
+t_chunk *get_next_chunk(t_chunk *chunk)
 {
 	return get_chunk((void *)chunk + get_chunk_size(chunk));
 }
 
-inline void *get_chunk_payload(t_chunk *chunk)
+void *get_chunk_payload(t_chunk *chunk)
 {
 	return (void *)chunk + sizeof(t_chunk);
 }
 
-inline size_t get_payload_size(t_chunk *chunk)
+size_t get_payload_size(t_chunk *chunk)
 {
 	return get_chunk_size(chunk) - sizeof(t_chunk);
 }
 
-inline t_chunk *get_first_chunk(t_heap *heap)
+t_chunk *get_first_chunk(t_heap *heap)
 {
 	return get_chunk((void *)heap + sizeof(t_heap));
 }
 
 #include <assert.h>
-extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
+t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_config config;
 	size_t rest;
@@ -80,12 +80,12 @@ extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 	return chunk;
 }
 
-inline bool chunk_is_available(t_chunk *chunk, size_t s)
+bool chunk_is_available(t_chunk *chunk, size_t s)
 {
 	return is_chunk_free(chunk) && s <= get_chunk_size(chunk);
 }
 
-inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
+bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 {
 	void *start;
 	void *end;
@@ -95,7 +95,7 @@ inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 	return ((void *)chunk > start && (void *)chunk < end);
 }
 
-extern t_chunk *search_free_chunk(t_config_type type, size_t size)
+t_chunk *search_free_chunk(t_config_type type, size_t size)
 {
 	t_heap **heap;
 	t_chunk *chunk;
@@ -117,7 +117,7 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 	return NULL;
 }
 
-extern void merge_chunk(t_heap *heap, t_chunk *chunk)
+void merge_chunk(t_heap *heap, t_chunk *chunk)
 {
 	t_chunk *next;
 
@@ -131,7 +131,7 @@ extern void merge_chunk(t_heap *heap, t_chunk *chunk)
 	}
 }
 
-extern bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
+bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
 {
 	t_chunk *compare;
 

@@ -1,7 +1,6 @@
 #include "chunk.h"
 #include "align.h"
 #include "malloc.h"
-#include "debug.h"
 
 void *ft_memcpy(void *dst, const void *src, size_t n)
 {

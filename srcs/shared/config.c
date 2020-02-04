@@ -34,7 +34,7 @@ static t_config config_large(void)
 		.chunk_max = (size_t)-1};
 }
 
-extern t_config get_config(t_config_type type)
+t_config get_config(t_config_type type)
 {
 	static t_config (*config[TYPES])(void) =
 		{
@@ -46,7 +46,7 @@ extern t_config get_config(t_config_type type)
 	return config[type]();
 }
 
-extern t_config_type get_config_type(size_t size)
+t_config_type get_config_type(size_t size)
 {
 	t_config config;
 	t_config_type type;
