@@ -45,12 +45,12 @@ void *realloc(void *ptr, size_t size)
 		return NULL;
 	if (chunk_is_corrupt(heap, chunk))
 		return NULL;
-	if (size < chunk->forward - sizeof(t_chunk))
+	if (size < get_payload_size(chunk))
 		return ptr;
 	new = malloc(size);
 	if (new == NULL)
 		return NULL;
-	ft_memcpy(new, get_chunk_payload(chunk), chunk->forward - sizeof(t_chunk));
+	ft_memcpy(new, get_chunk_payload(chunk), get_payload_size(chunk));
 	free(ptr);
 	return new;
 }

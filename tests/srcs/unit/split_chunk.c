@@ -8,7 +8,7 @@ t_chunk *dummy_new_chunk(size_t size)
     void *mem = get_some_memory(size);
     t_chunk *chk = (t_chunk *)mem;
     chk->forward = size;
-    chk->free = 0;
+    set_chunk_free(chk);
     return chk;
 }
 

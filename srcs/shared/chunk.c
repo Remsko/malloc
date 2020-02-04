@@ -5,6 +5,21 @@
 #include "debug.h"
 #include <stdbool.h>
 
+inline void set_chunk_free(t_chunk *chunk)
+{
+	chunk->forward |= FLAG_FREE;
+}
+
+inline void set_chunk_used(t_chunk *chunk)
+{
+	chunk->forward &= ~FLAG_FREE;
+}
+
+inline bool is_chunk_free(t_chunk *chunk)
+{
+	return (bool)(chunk->forward & FLAG_FREE);
+}
+
 inline t_chunk *get_chunk(void *start)
 {
 	return (t_chunk *)start;
@@ -16,8 +31,13 @@ inline t_chunk *new_chunk(void *start, size_t size)
 
 	chunk = get_chunk(start);
 	chunk->forward = size;
-	chunk->free = true;
+	set_chunk_free(chunk);
 	return chunk;
+}
+
+inline size_t get_chunk_size(t_chunk *chunk)
+{
+	return chunk->forward & ~16U;
 }
 
 inline t_chunk *get_chunk_from_payload(void *payload)
@@ -27,7 +47,7 @@ inline t_chunk *get_chunk_from_payload(void *payload)
 
 inline t_chunk *get_next_chunk(t_chunk *chunk)
 {
-	return get_chunk((void *)chunk + chunk->forward);
+	return get_chunk((void *)chunk + get_chunk_size(chunk));
 }
 
 inline void *get_chunk_payload(t_chunk *chunk)
@@ -37,7 +57,7 @@ inline void *get_chunk_payload(t_chunk *chunk)
 
 inline size_t get_payload_size(t_chunk *chunk)
 {
-	return chunk->forward - sizeof(t_chunk);
+	return get_chunk_size(chunk) - sizeof(t_chunk);
 }
 
 inline t_chunk *get_first_chunk(t_heap *heap)
@@ -51,9 +71,9 @@ extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 	t_config config;
 	size_t rest;
 
-	assert(size <= chunk->forward);
+	assert(size <= get_chunk_size(chunk));
 	config = get_config(type);
-	rest = chunk->forward - size;
+	rest = get_chunk_size(chunk) - size;
 	if (sizeof(t_chunk) + config.chunk_min <= rest)
 	{
 		new_chunk((void *)chunk, size);
@@ -64,7 +84,7 @@ extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 
 inline bool chunk_is_available(t_chunk *chunk, size_t s)
 {
-	return chunk->free && s <= chunk->forward;
+	return is_chunk_free(chunk) && s <= get_chunk_size(chunk);
 }
 
 inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
@@ -106,8 +126,8 @@ extern void merge_chunk(t_heap *heap, t_chunk *chunk)
 	while (1)
 	{
 		next = get_next_chunk(chunk);
-		if (chunk_is_on_heap(heap, next) && next->free)
-			chunk->forward += next->forward;
+		if (chunk_is_on_heap(heap, next) && is_chunk_free(next))
+			chunk->forward += get_chunk_size(next);
 		else
 			break;
 	}

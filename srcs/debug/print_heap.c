@@ -18,7 +18,7 @@ extern void print_heap(t_heap *heap)
     print_string("(");
     ft_putnbr(chunk->forward);
     print_string("-");
-    ft_putnbr(chunk->free);
+    ft_putnbr(is_chunk_free(chunk));
     print_string(")");
     chunk = get_next_chunk(chunk);
     while (chunk_is_on_heap(heap, chunk))
@@ -31,7 +31,7 @@ extern void print_heap(t_heap *heap)
         print_string("(");
         ft_putnbr(chunk->forward);
         print_string("-");
-        ft_putnbr(chunk->free);
+        ft_putnbr(is_chunk_free(chunk));
         print_string(")");
         chunk = get_next_chunk(chunk);
     }

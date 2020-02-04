@@ -16,7 +16,7 @@ void free(void *ptr)
 		return;
 	if (chunk_is_corrupt(heap, chunk))
 		return;
-	chunk->free = true;
+	set_chunk_free(chunk);
 	t_config_type type = get_config_type(chunk->forward);
 	t_heap **head = get_arena_heap_head(type);
 	merge_chunk(heap, chunk);

@@ -48,7 +48,7 @@ void *dynalloc(size_t size)
 	chunk = get_free_chunk(chunk_size);
 	if (chunk == NULL)
 		return NULL;
-	chunk->free = false;
+	set_chunk_used(chunk);
 	payload = get_chunk_payload(chunk);
 	return payload;
 }
