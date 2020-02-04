@@ -3,8 +3,6 @@
 #include "config.h"
 #include "arena.h"
 #include "chunk.h"
-#include "debug.h"
-#include <stdio.h>
 
 t_chunk *get_free_chunk(size_t chunk_size)
 {
@@ -53,9 +51,6 @@ void *dynalloc(size_t size)
 
 void *malloc(size_t size)
 {
-	//print_string("test1");
 	void *ptr = dynalloc(size);
-	//print_string("test2");
-	print_number("m", (size_t)ptr);
 	return ptr;
 }

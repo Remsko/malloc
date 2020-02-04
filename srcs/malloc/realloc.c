@@ -29,31 +29,25 @@ void *ft_memmove(void *dest, const void *src, size_t n)
 #include "debug.h"
 void *realloc(void *ptr, size_t size)
 {
-	print_number("r", (size_t)ptr);
-	print_number("ask", size);
 	if (!size)
 	{
 		free(ptr);
 		return NULL;
 	}
 	if (!ptr)
-	{
 		return malloc(size);
-	}
 	t_chunk *chunk = get_chunk_from_payload(ptr);
 	t_heap *heap = search_heap(chunk);
 	if (!heap)
 		return NULL;
 	if (chunk_is_corrupt(heap, chunk))
 		return NULL;
-	print_number("fwd", chunk->forward);
 	if (size < chunk->forward - sizeof(t_chunk))
 		return ptr;
 	void *new = malloc(size);
 	if (!new)
 		return NULL;
 	ft_memcpy(new, get_chunk_payload(chunk), chunk->forward - sizeof(t_chunk));
-	print_number("new", get_chunk_from_payload(new)->forward);
 	free(ptr);
 	return new;
 }
