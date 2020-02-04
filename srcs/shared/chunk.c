@@ -1,8 +1,6 @@
 #include "chunk.h"
-#include "heap.h"
+#include "align.h"
 #include "arena.h"
-#include "config.h"
-#include "debug.h"
 #include <stdbool.h>
 
 inline void set_chunk_free(t_chunk *chunk)
@@ -37,7 +35,7 @@ inline t_chunk *new_chunk(void *start, size_t size)
 
 inline size_t get_chunk_size(t_chunk *chunk)
 {
-	return chunk->forward & ~16UL;
+	return chunk->forward & ~(MEMORY_ALIGNMENT - 1);
 }
 
 inline t_chunk *get_chunk_from_payload(void *payload)
