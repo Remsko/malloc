@@ -13,7 +13,11 @@ t_chunk *get_free_chunk(size_t chunk_size)
 
 	type = get_config_type(chunk_size);
 	if (type == LARGE)
-		new_heap_size = chunk_size;
+	{
+		new_heap_size = page_align(chunk_size + sizeof(t_heap));
+		if (new_heap_size < chunk_size)
+			return NULL;
+	}
 	else if ((chunk = search_free_chunk(type, chunk_size)))
 	{
 		split_chunk(chunk, type, chunk_size);

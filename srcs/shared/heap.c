@@ -50,23 +50,25 @@ extern size_t get_heap_size(t_config_type type)
 extern t_heap *search_heap(t_chunk *chunk)
 {
 	t_heap **heap[TYPES];
+	t_heap *h;
 	t_config_type type;
 	bool forward;
 
 	for (type = 0; type < TYPES; type++)
 		heap[type] = get_arena_heap_head(type);
-	forward = true;
-	while (forward == true)
+	forward = 1;
+	while (forward == 1)
 	{
-		forward = false;
+		forward = 0;
 		for (type = 0; type < TYPES; type++)
 		{
-			if (heap[type] && *heap[type])
+			h = *heap[type];
+			if (h != NULL)
 			{
-				forward = true;
-				if (chunk_is_on_heap(*heap[type], chunk))
-					return *heap[type];
-				heap[type] = &(*heap[type])->next;
+				forward = 1;
+				if (chunk_is_on_heap(h, chunk))
+					return h;
+				heap[type] = &h->next;
 			}
 		}
 	}

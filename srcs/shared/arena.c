@@ -35,24 +35,14 @@ extern t_heap **get_arena_heap_head(t_config_type type)
 	}
 }
 
-#include "debug.h"
 extern t_heap *arena_unshift(t_config_type type, size_t size)
 {
 	t_heap **head;
 	void *memory;
-	size_t total;
 
-	if (type == LARGE)
-	{
-		total = page_align(size + sizeof(t_heap));
-		if (total < size)
-			return NULL;
-	}
-	else
-		total = size;
-	memory = get_some_memory(total);
+	memory = get_some_memory(size);
 	head = get_arena_heap_head(type);
 	if (memory == NULL || head == NULL)
 		return NULL;
-	return unshift_new_heap(head, memory, total);
+	return unshift_new_heap(head, memory, size);
 }

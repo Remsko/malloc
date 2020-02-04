@@ -58,8 +58,6 @@ extern t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 	{
 		new_chunk((void *)chunk, size);
 		new_chunk((void *)chunk + size, rest);
-		// print_number("Splitted", (size_t)chunk + size);
-		// print_number("NEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXT", (size_t)get_next_chunk(chunk) + get_next_chunk(chunk)->forward);
 	}
 	return chunk;
 }
@@ -76,8 +74,6 @@ inline bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 
 	start = (void *)heap;
 	end = (void *)heap + heap->size;
-	// print_number("start",(size_t)start);
-	// print_number("end",(size_t)end);
 	return ((void *)chunk > start && (void *)chunk < end);
 }
 
@@ -94,7 +90,6 @@ extern t_chunk *search_free_chunk(t_config_type type, size_t size)
 		chunk = get_first_chunk(*heap);
 		while (chunk_is_on_heap(*heap, chunk))
 		{
-
 			if (chunk_is_available(chunk, size))
 				return chunk;
 			chunk = get_next_chunk(chunk);
@@ -121,22 +116,13 @@ extern void merge_chunk(t_heap *heap, t_chunk *chunk)
 extern bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
 {
 	t_chunk *compare;
-	//int i;
-
-	//print_string("ENDDDDDDDDDDDDDDDDDDDDDDDDD \n\n\n");
 
 	compare = get_first_chunk(heap);
 	while (chunk_is_on_heap(heap, compare))
 	{
 		if (compare == search)
-		{
 			return false;
-		}
 		compare = get_next_chunk(compare);
-		// print_number("addr", (size_t)compare);
-		// i=0;
-		// while(i < 10000000)
-		// 	i++;
 	}
 	return true;
 }
