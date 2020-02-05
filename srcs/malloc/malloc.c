@@ -20,7 +20,6 @@ t_chunk *get_free_chunk(size_t chunk_size)
 	}
 	else if ((chunk = search_free_chunk(type, chunk_size)))
 	{
-		split_chunk(chunk, type, chunk_size);
 		return chunk;
 	}
 	else
@@ -30,7 +29,7 @@ t_chunk *get_free_chunk(size_t chunk_size)
 		return NULL;
 	chunk = get_first_chunk(heap);
 	chunk->forward = heap->size - sizeof(t_heap);
-	split_chunk(chunk, type, chunk_size);
+	split_chunk(heap, chunk, type, chunk_size);
 	return chunk;
 }
 

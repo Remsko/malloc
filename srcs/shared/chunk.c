@@ -29,6 +29,7 @@ t_chunk *new_chunk(void *start, size_t size)
 
 	chunk = get_chunk(start);
 	chunk->forward = size;
+	chunk->backward = 0;
 	set_chunk_free(chunk);
 	return chunk;
 }
@@ -48,6 +49,11 @@ t_chunk *get_next_chunk(t_chunk *chunk)
 	return get_chunk((void *)chunk + get_chunk_size(chunk));
 }
 
+t_chunk *get_previous_chunk(t_chunk *chunk)
+{
+	return get_chunk((void *)chunk - chunk->backward);
+}
+
 void *get_chunk_payload(t_chunk *chunk)
 {
 	return (void *)chunk + sizeof(t_chunk);
@@ -64,8 +70,10 @@ t_chunk *get_first_chunk(t_heap *heap)
 }
 
 #include <assert.h>
-t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
+t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, t_config_type type, size_t size)
 {
+	t_chunk *new;
+	t_chunk *new_next;
 	t_config config;
 	size_t rest;
 
@@ -75,7 +83,11 @@ t_chunk *split_chunk(t_chunk *chunk, t_config_type type, size_t size)
 	if (sizeof(t_chunk) + config.chunk_min <= rest)
 	{
 		new_chunk((void *)chunk, size);
-		new_chunk((void *)chunk + size, rest);
+		new = new_chunk((void *)chunk + size, rest);
+		new->backward = size;
+		new_next = get_next_chunk(new);
+		if (chunk_is_on_heap(heap, new_next))
+			new_next->backward = get_chunk_size(new);
 	}
 	return chunk;
 }
@@ -109,7 +121,10 @@ t_chunk *search_free_chunk(t_config_type type, size_t size)
 		while (chunk_is_on_heap(*heap, chunk))
 		{
 			if (chunk_is_available(chunk, size))
+			{
+				split_chunk(*heap, chunk, type, size);
 				return chunk;
+			}
 			chunk = get_next_chunk(chunk);
 		}
 		heap = &(*heap)->next;
@@ -117,18 +132,39 @@ t_chunk *search_free_chunk(t_config_type type, size_t size)
 	return NULL;
 }
 
-void merge_chunk(t_heap *heap, t_chunk *chunk)
+#include "debug.h"
+t_chunk *merge_chunk(t_heap *heap, t_chunk *chunk)
 {
 	t_chunk *next;
+	t_chunk *prev;
+	size_t total;
 
-	while (1)
+	//print_heap(heap);
+	total = get_chunk_size(chunk);
+	next = get_next_chunk(chunk);
+	prev = get_previous_chunk(chunk);
+	// while (1)
+	// {
+	if (chunk_is_on_heap(heap, next) && is_chunk_free(next))
 	{
-		next = get_next_chunk(chunk);
-		if (chunk_is_on_heap(heap, next) && is_chunk_free(next))
-			chunk->forward += get_chunk_size(next);
-		else
-			break;
+		total += get_chunk_size(next);
 	}
+	if (chunk_is_on_heap(heap, prev) && is_chunk_free(prev) && prev != chunk)
+	{
+		total += get_chunk_size(prev);
+		chunk = prev;
+	}
+	// 	else
+	// 		break;
+	// 	print_number("total merge", total);
+	// }
+	chunk->forward = total;
+	next = get_next_chunk(chunk);
+	if (chunk_is_on_heap(heap, next))
+		next->backward = get_chunk_size(chunk);
+	set_chunk_free(chunk);
+	//print_heap(heap);
+	return chunk;
 }
 
 bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
