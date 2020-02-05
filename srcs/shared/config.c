@@ -61,3 +61,18 @@ t_config_type get_config_type(size_t size)
 	}
 	return type;
 }
+
+char *config_type_to_string(t_config_type type)
+{
+	switch (type)
+	{
+	case TINY:
+		return "TINY";
+	case SMALL:
+		return "SMALL";
+	case LARGE:
+		return "LARGE";
+	default:
+		return NULL;
+	}
+}

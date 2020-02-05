@@ -69,11 +69,19 @@ t_chunk *get_first_chunk(t_heap *heap)
 	return get_chunk((void *)heap + sizeof(t_heap));
 }
 
+void update_next_chunk(t_heap *heap, t_chunk *chunk)
+{
+	t_chunk *next;
+
+	next = get_next_chunk(chunk);
+	if (chunk_is_on_heap(heap, next))
+		next->backward = get_chunk_size(chunk);
+}
+
 #include <assert.h>
 t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_chunk *new;
-	t_chunk *new_next;
 	t_config config;
 	size_t rest;
 
@@ -85,9 +93,7 @@ t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, t_config_type type, size_t si
 		new_chunk((void *)chunk, size);
 		new = new_chunk((void *)chunk + size, rest);
 		new->backward = size;
-		new_next = get_next_chunk(new);
-		if (chunk_is_on_heap(heap, new_next))
-			new_next->backward = get_chunk_size(new);
+		update_next_chunk(heap, new);
 	}
 	return chunk;
 }
@@ -113,57 +119,61 @@ t_chunk *search_free_chunk(t_config_type type, size_t size)
 	t_chunk *chunk;
 
 	heap = get_arena_heap_head(type);
-	if (heap == NULL)
-		return NULL;
-	while ((*heap) != NULL)
+	if (heap != NULL)
 	{
-		chunk = get_first_chunk(*heap);
-		while (chunk_is_on_heap(*heap, chunk))
+		while ((*heap) != NULL)
 		{
-			if (chunk_is_available(chunk, size))
+			chunk = get_first_chunk(*heap);
+			while (chunk_is_on_heap(*heap, chunk))
 			{
-				split_chunk(*heap, chunk, type, size);
-				return chunk;
+				if (chunk_is_available(chunk, size))
+				{
+					split_chunk(*heap, chunk, type, size);
+					return chunk;
+				}
+				chunk = get_next_chunk(chunk);
 			}
-			chunk = get_next_chunk(chunk);
+			heap = &(*heap)->next;
 		}
-		heap = &(*heap)->next;
 	}
 	return NULL;
 }
 
-#include "debug.h"
-t_chunk *merge_chunk(t_heap *heap, t_chunk *chunk)
+t_chunk *merge_chunk_legacy(t_heap *heap, t_chunk *chunk)
 {
 	t_chunk *next;
 	t_chunk *prev;
 	size_t total;
 
-	//print_heap(heap);
 	total = get_chunk_size(chunk);
 	next = get_next_chunk(chunk);
-	prev = get_previous_chunk(chunk);
-	// while (1)
-	// {
 	if (chunk_is_on_heap(heap, next) && is_chunk_free(next))
 	{
 		total += get_chunk_size(next);
 	}
+	prev = get_previous_chunk(chunk);
 	if (chunk_is_on_heap(heap, prev) && is_chunk_free(prev) && prev != chunk)
 	{
 		total += get_chunk_size(prev);
 		chunk = prev;
 	}
-	// 	else
-	// 		break;
-	// 	print_number("total merge", total);
-	// }
 	chunk->forward = total;
-	next = get_next_chunk(chunk);
-	if (chunk_is_on_heap(heap, next))
-		next->backward = get_chunk_size(chunk);
+	update_next_chunk(heap, chunk);
 	set_chunk_free(chunk);
-	//print_heap(heap);
+	return chunk;
+}
+
+t_chunk *merge_chunk(t_heap *heap, t_chunk *chunk1, t_chunk *chunk2)
+{
+	; // stub coder
+}
+
+t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk)
+{
+	set_chunk_free(chunk);
+	chunk = merge_chunk(heap, chunk, get_next_chunk(chunk));
+	chunk = merge_chunk(heap, get_previous_chunk(chunk), chunk);
+	update_next_chunk(heap, chunk);
 	return chunk;
 }
 
