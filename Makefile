@@ -23,7 +23,7 @@ INC = $(addprefix $(INC_PATH)/,$(INC_NAME))
 
 CPPFLAGS = $(addprefix -I,$(INC_PATH))
 
-SRC_PATH = srcs/
+SRC_PATH = srcs
 
 SRC_SUB += malloc
 SRC_NAME += malloc.c
@@ -32,6 +32,7 @@ SRC_NAME += calloc.c
 SRC_NAME += valloc.c
 SRC_NAME += realloc.c
 SRC_NAME += reallocf.c
+SRC_NAME += show_alloc_mem.c
 
 SRC_SUB += shared
 SRC_NAME += align.c
@@ -45,6 +46,12 @@ SRC_SUB += debug
 SRC_NAME += print_number.c
 SRC_NAME += print_string.c
 SRC_NAME += print_heap.c
+
+SRC_SUB += libc
+SRC_NAME += ft_bzero.c
+SRC_NAME += ft_memcpy.c
+SRC_NAME += ft_memmove.c
+SRC_NAME += ft_memset.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 

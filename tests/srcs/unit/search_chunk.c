@@ -3,6 +3,7 @@
 #include "memory.h"
 #include "chunk.h"
 #include "test.h"
+#include "debug.h"
 
 void test_search_chunk(void)
 {
@@ -14,19 +15,20 @@ void test_search_chunk(void)
     // one chunk
     t_chunk *chunk = get_first_chunk(heap);
     chunk->forward = size - sizeof(t_heap);
-    split_chunk(chunk, 1, 256);
+    split_chunk(heap, chunk, 1, 256);
+
     t_chunk *found = search_free_chunk(1, 80);
     (found == NULL) ? putstr(" NO") : putstr(" OK");
-    split_chunk(found, 1, 80);
+    split_chunk(heap, found, 1, 80);
 
     // two chunk
     t_chunk *found2 = search_free_chunk(1, 80);
     (found2 == NULL) ? putstr(" NO") : putstr(" OK");
-    split_chunk(found2, 1, 80);
+    split_chunk(heap, found2, 1, 80);
 
     t_chunk *found3 = search_free_chunk(1, 80);
     (found3 == NULL) ? putstr(" NO") : putstr(" OK");
-    split_chunk(found3, 1, 80);
+    split_chunk(heap, found3, 1, 80);
 
     //size > max
     t_chunk *notf = search_free_chunk(1, size);

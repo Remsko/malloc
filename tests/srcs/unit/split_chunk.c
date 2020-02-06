@@ -8,7 +8,7 @@ t_chunk *dummy_new_chunk(size_t size)
     void *mem = get_some_memory(size);
     t_chunk *chk = (t_chunk *)mem;
     chk->forward = size;
-    chk->free = 0;
+    set_chunk_free(chk);
     return chk;
 }
 
@@ -19,7 +19,7 @@ void test_split_chunk(void)
     //
     putstr("Simple Split:");
     t_chunk *simple = dummy_new_chunk(4096);
-    t_chunk *splitted = split_chunk(simple, 2, 256);
+    t_chunk *splitted = split_chunk(heap, simple, 2, 256);
     if (splitted->forward != 256)
     {
         return putstr(" NO\n");
@@ -42,7 +42,7 @@ void test_split_chunk(void)
     // case no space
 
     putstr("No Space: ");
-    t_chunk *nospace = split_chunk(simple, 2, 196);
+    t_chunk *nospace = split_chunk(heap, simple, 2, 196);
     if (nospace->forward != 256)
     {
         return putstr(" NO\n");
@@ -56,7 +56,7 @@ void test_split_chunk(void)
     // case space left
 
     putstr("Space Left: ");
-    t_chunk *spaceleft = split_chunk(splitted, 2, 512);
+    t_chunk *spaceleft = split_chunk(heap, splitted, 2, 512);
     if (spaceleft->forward != 512)
     {
         return putstr(" NO\n");

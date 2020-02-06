@@ -1,3 +1,4 @@
+#include "align.h"
 #include <unistd.h>
 
 size_t align(size_t size, size_t alignment)
@@ -12,5 +13,5 @@ size_t page_align(size_t size)
 
 size_t memory_align(size_t size)
 {
-	return align(size, 16);
+	return align(size, MEMORY_ALIGNMENT);
 }

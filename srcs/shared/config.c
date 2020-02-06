@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "debug.h"
 
-static t_config config_tiny()
+static t_config config_tiny(void)
 {
 	size_t xpages;
 
@@ -14,7 +14,7 @@ static t_config config_tiny()
 	};
 }
 
-static t_config config_small()
+static t_config config_small(void)
 {
 	size_t xpages;
 
@@ -26,7 +26,7 @@ static t_config config_small()
 	};
 }
 
-static t_config config_large()
+static t_config config_large(void)
 {
 	return (t_config){
 		.heap_size = (size_t)-1,
@@ -34,9 +34,9 @@ static t_config config_large()
 		.chunk_max = (size_t)-1};
 }
 
-extern t_config get_config(t_config_type type)
+t_config get_config(t_config_type type)
 {
-	static t_config (*config[TYPES])() =
+	static t_config (*config[TYPES])(void) =
 		{
 			[TINY] = &config_tiny,
 			[SMALL] = &config_small,
@@ -46,7 +46,7 @@ extern t_config get_config(t_config_type type)
 	return config[type]();
 }
 
-extern t_config_type get_config_type(size_t size)
+t_config_type get_config_type(size_t size)
 {
 	t_config config;
 	t_config_type type;
@@ -60,4 +60,19 @@ extern t_config_type get_config_type(size_t size)
 		type++;
 	}
 	return type;
+}
+
+char *config_type_to_string(t_config_type type)
+{
+	switch (type)
+	{
+	case TINY:
+		return "TINY";
+	case SMALL:
+		return "SMALL";
+	case LARGE:
+		return "LARGE";
+	default:
+		return NULL;
+	}
 }

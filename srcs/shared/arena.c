@@ -5,7 +5,7 @@
 #include "memory.h"
 #include <assert.h>
 
-extern t_arena *get_arena_singletone(void)
+t_arena *get_arena_singletone(void)
 {
 	static t_arena arena =
 		(t_arena){
@@ -17,7 +17,7 @@ extern t_arena *get_arena_singletone(void)
 	return &arena;
 }
 
-extern t_heap **get_arena_heap_head(t_config_type type)
+t_heap **get_arena_heap_head(t_config_type type)
 {
 	t_arena *arena;
 
@@ -35,7 +35,7 @@ extern t_heap **get_arena_heap_head(t_config_type type)
 	}
 }
 
-extern t_heap *arena_unshift(t_config_type type, size_t size)
+t_heap *arena_unshift(t_config_type type, size_t size)
 {
 	t_heap **head;
 	void *memory;

@@ -20,5 +20,6 @@ typedef struct s_config
 
 t_config get_config(t_config_type type);
 t_config_type get_config_type(size_t size);
+char *config_type_to_string(t_config_type type);
 
 #endif

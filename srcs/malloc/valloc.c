@@ -1,7 +1,6 @@
 #include "malloc.h"
 #include "align.h"
 
-#include "debug.h"
 void *valloc(size_t size)
 {
 	size_t xpages;
@@ -9,6 +8,5 @@ void *valloc(size_t size)
 	xpages = page_align(size);
 	if (xpages < size)
 		return NULL;
-	void *ptr = malloc(xpages);
-	return ptr;
+	return malloc(xpages);
 }
