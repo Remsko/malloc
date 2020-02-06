@@ -46,6 +46,12 @@ SRC_NAME += print_number.c
 SRC_NAME += print_string.c
 SRC_NAME += print_heap.c
 
+SRC_SUB += libc
+SRC_NAME += ft_bzero.c
+SRC_NAME += ft_memcpy.c
+SRC_NAME += ft_memmove.c
+SRC_NAME += ft_memset.c
+
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
 OBJ_PATH = obj

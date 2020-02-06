@@ -8,6 +8,5 @@ void *valloc(size_t size)
 	xpages = page_align(size);
 	if (xpages < size)
 		return NULL;
-	void *ptr = malloc(xpages);
-	return ptr;
+	return malloc(xpages);
 }
