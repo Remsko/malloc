@@ -15,7 +15,7 @@ extern void print_heap(t_heap *heap)
     print_string(";");
     chunk = get_first_chunk(heap);
     print_string("[");
-    ft_putnbr(is_chunk_free(chunk));
+    ft_putnbr(chunk_is_free(chunk));
     print_string("]");
     ft_putnbr((size_t)chunk);
     print_string("(");
@@ -28,7 +28,7 @@ extern void print_heap(t_heap *heap)
     {
         print_string("->");
         print_string("[");
-        ft_putnbr(is_chunk_free(chunk));
+        ft_putnbr(chunk_is_free(chunk));
         print_string("]");
         ft_putnbr((size_t)chunk);
         print_string("(");

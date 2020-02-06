@@ -31,25 +31,20 @@ void *realloc(void *ptr, size_t size)
 	t_heap *heap;
 	t_chunk *chunk;
 
-	if (size == 0)
+	if (size == 0 || ptr == NULL)
 	{
+		new = malloc(size);
 		free(ptr);
-		return NULL;
+		return new;
 	}
-	if (ptr == NULL)
-		return malloc(size);
 	chunk = get_chunk_from_payload(ptr);
-	heap = search_heap(chunk);
-	if (heap == NULL)
+	if (!chunk_is_referenced(&heap, chunk) || chunk_is_corrupt(heap, chunk))
 		return NULL;
-	if (chunk_is_corrupt(heap, chunk))
-		return NULL;
-	if (size < get_payload_size(chunk))
+	if (size <= get_payload_size(chunk))
 		return ptr;
 	new = malloc(size);
-	if (new == NULL)
-		return NULL;
-	ft_memcpy(new, get_chunk_payload(chunk), get_payload_size(chunk));
+	if (new != NULL)
+		ft_memmove(new, get_chunk_payload(chunk), get_payload_size(chunk));
 	free(ptr);
 	return new;
 }

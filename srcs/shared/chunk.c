@@ -13,7 +13,7 @@ void set_chunk_used(t_chunk *chunk)
 	chunk->forward &= ~FLAG_FREE;
 }
 
-bool is_chunk_free(t_chunk *chunk)
+bool chunk_is_free(t_chunk *chunk)
 {
 	return (bool)(chunk->forward & FLAG_FREE);
 }
@@ -100,7 +100,7 @@ t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, t_config_type type, size_t si
 
 bool chunk_is_available(t_chunk *chunk, size_t s)
 {
-	return is_chunk_free(chunk) && s <= get_chunk_size(chunk);
+	return chunk_is_free(chunk) && s <= get_chunk_size(chunk);
 }
 
 bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
@@ -139,30 +139,6 @@ t_chunk *search_free_chunk(t_config_type type, size_t size)
 	return NULL;
 }
 
-// t_chunk *merge_chunk_legacy(t_heap *heap, t_chunk *chunk)
-// {
-// 	t_chunk *next;
-// 	t_chunk *prev;
-// 	size_t total;
-
-// 	total = get_chunk_size(chunk);
-// 	next = get_next_chunk(chunk);
-// 	if (chunk_is_on_heap(heap, next) && is_chunk_free(next))
-// 	{
-// 		total += get_chunk_size(next);
-// 	}
-// 	prev = get_previous_chunk(chunk);
-// 	if (chunk_is_on_heap(heap, prev) && is_chunk_free(prev) && prev != chunk)
-// 	{
-// 		total += get_chunk_size(prev);
-// 		chunk = prev;
-// 	}
-// 	chunk->forward = total;
-// 	update_next_chunk(heap, chunk);
-// 	set_chunk_free(chunk);
-// 	return chunk;
-// }
-
 static t_chunk *merge_chunk(t_chunk *start, t_chunk *end)
 {
 	start->forward += get_chunk_size(end);
@@ -174,12 +150,11 @@ t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk)
 	t_chunk *next;
 	t_chunk *prev;
 
-	set_chunk_free(chunk);
 	next = get_next_chunk(chunk);
-	if (chunk_is_on_heap(heap, next) && is_chunk_free(next))
+	if (chunk_is_on_heap(heap, next) && chunk_is_free(next))
 		chunk = merge_chunk(chunk, next);
 	prev = get_previous_chunk(chunk);
-	if (chunk_is_on_heap(heap, prev) && is_chunk_free(prev) && prev != chunk)
+	if (chunk_is_on_heap(heap, prev) && chunk_is_free(prev) && prev != chunk)
 		chunk = merge_chunk(prev, chunk);
 	update_next_chunk(heap, chunk);
 	return chunk;
@@ -189,6 +164,8 @@ bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
 {
 	t_chunk *compare;
 
+	if (heap == NULL)
+		return true;
 	compare = get_first_chunk(heap);
 	while (chunk_is_on_heap(heap, compare))
 	{
@@ -197,4 +174,10 @@ bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
 		compare = get_next_chunk(compare);
 	}
 	return true;
+}
+
+bool chunk_is_referenced(t_heap **heap, t_chunk *chunk)
+{
+	*heap = search_heap(chunk);
+	return *heap != NULL;
 }

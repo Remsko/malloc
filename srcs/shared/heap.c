@@ -2,12 +2,27 @@
 #include "config.h"
 #include "chunk.h"
 #include "arena.h"
+#include "memory.h"
 
 void delete_heap(t_heap **head, t_heap *delete)
 {
 	while ((*head) != delete)
 		head = &(*head)->next;
 	*head = delete->next;
+}
+
+void release_heap_maybe(t_heap *heap, t_config_type type)
+{
+	t_heap **head;
+	t_chunk *chunk;
+
+	chunk = get_first_chunk(heap);
+	if (heap->size - sizeof(t_heap) == get_chunk_size(chunk))
+	{
+		head = get_arena_heap_head(type);
+		delete_heap(head, heap);
+		release_some_memory((void *)heap, heap->size);
+	}
 }
 
 size_t get_heap_size(t_config_type type)
