@@ -32,6 +32,7 @@ SRC_NAME += calloc.c
 SRC_NAME += valloc.c
 SRC_NAME += realloc.c
 SRC_NAME += reallocf.c
+SRC_NAME += show_alloc_mem.c
 
 SRC_SUB += shared
 SRC_NAME += align.c

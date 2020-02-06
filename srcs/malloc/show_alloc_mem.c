@@ -1,9 +1,22 @@
 #include "heap.h"
 #include "chunk.h"
 #include "config.h"
+#include "arena.h"
+#include <stdio.h>
+
+// TINY : 0xA0000
+// 0xA0020 - 0xA004A : 42 octets
+// 0xA006A - 0xA00BE : 84 octets
+// SMALL : 0xAD000
+// 0xAD020 - 0xADEAD : 3725 octets
+// LARGE : 0xB0000
+// 0xB0020 - 0xBBEEF : 48847 octets
+// Total : 52698 octets
 
 static void show_chunk(t_chunk *chunk)
 {
+    if (!chunk_is_free(chunk))
+        printf("0x%X - 0x%X : %zu octets\n", (unsigned int)chunk, (unsigned int)get_next_chunk(chunk), get_chunk_size(chunk));
     //print chunk format;
 }
 
@@ -19,7 +32,7 @@ static size_t show_heap_and_count(t_config_type type)
     {
         while ((*heap) != NULL)
         {
-            //print heap format;
+            printf("%s : 0x%X\n", config_type_to_string(type), (unsigned int)*heap);
             heap_type_total += (*heap)->size;
             chunk = get_first_chunk(*heap);
             while (chunk_is_on_heap(*heap, chunk))
@@ -40,5 +53,5 @@ void show_alloc_mem(void)
     total = 0;
     for (t_config_type type = 0; type < TYPES; type++)
         total += show_heap_and_count(type);
-    // print total format;
+    printf("Total : %zu octets\n", total);
 }
