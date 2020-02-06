@@ -26,7 +26,7 @@ void free(void *ptr)
 		return;
 	set_chunk_free(chunk);
 	t_config_type type = get_config_type(get_chunk_size(chunk));
-	chunk = merge_chunk(heap, chunk);
+	chunk = coalesce_chunk(heap, chunk);
 	if (heap->size - sizeof(t_heap) == get_chunk_size(chunk))
 	{
 		delete_heap(get_arena_heap_head(type), heap);

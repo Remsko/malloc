@@ -139,40 +139,48 @@ t_chunk *search_free_chunk(t_config_type type, size_t size)
 	return NULL;
 }
 
-t_chunk *merge_chunk_legacy(t_heap *heap, t_chunk *chunk)
-{
-	t_chunk *next;
-	t_chunk *prev;
-	size_t total;
+// t_chunk *merge_chunk_legacy(t_heap *heap, t_chunk *chunk)
+// {
+// 	t_chunk *next;
+// 	t_chunk *prev;
+// 	size_t total;
 
-	total = get_chunk_size(chunk);
-	next = get_next_chunk(chunk);
-	if (chunk_is_on_heap(heap, next) && is_chunk_free(next))
-	{
-		total += get_chunk_size(next);
-	}
-	prev = get_previous_chunk(chunk);
-	if (chunk_is_on_heap(heap, prev) && is_chunk_free(prev) && prev != chunk)
-	{
-		total += get_chunk_size(prev);
-		chunk = prev;
-	}
-	chunk->forward = total;
-	update_next_chunk(heap, chunk);
-	set_chunk_free(chunk);
-	return chunk;
-}
+// 	total = get_chunk_size(chunk);
+// 	next = get_next_chunk(chunk);
+// 	if (chunk_is_on_heap(heap, next) && is_chunk_free(next))
+// 	{
+// 		total += get_chunk_size(next);
+// 	}
+// 	prev = get_previous_chunk(chunk);
+// 	if (chunk_is_on_heap(heap, prev) && is_chunk_free(prev) && prev != chunk)
+// 	{
+// 		total += get_chunk_size(prev);
+// 		chunk = prev;
+// 	}
+// 	chunk->forward = total;
+// 	update_next_chunk(heap, chunk);
+// 	set_chunk_free(chunk);
+// 	return chunk;
+// }
 
-t_chunk *merge_chunk(t_heap *heap, t_chunk *chunk1, t_chunk *chunk2)
+static t_chunk *merge_chunk(t_chunk *start, t_chunk *end)
 {
-	; // stub coder
+	start->forward += get_chunk_size(end);
+	return start;
 }
 
 t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk)
 {
+	t_chunk *next;
+	t_chunk *prev;
+
 	set_chunk_free(chunk);
-	chunk = merge_chunk(heap, chunk, get_next_chunk(chunk));
-	chunk = merge_chunk(heap, get_previous_chunk(chunk), chunk);
+	next = get_next_chunk(chunk);
+	if (chunk_is_on_heap(heap, next) && is_chunk_free(next))
+		chunk = merge_chunk(chunk, next);
+	prev = get_previous_chunk(chunk);
+	if (chunk_is_on_heap(heap, prev) && is_chunk_free(prev) && prev != chunk)
+		chunk = merge_chunk(prev, chunk);
 	update_next_chunk(heap, chunk);
 	return chunk;
 }

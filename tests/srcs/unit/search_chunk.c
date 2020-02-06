@@ -17,15 +17,9 @@ void test_search_chunk(void)
     chunk->forward = size - sizeof(t_heap);
     split_chunk(heap, chunk, 1, 256);
 
-    putstr("\n");
-    print_heap(heap);
-
     t_chunk *found = search_free_chunk(1, 80);
     (found == NULL) ? putstr(" NO") : putstr(" OK");
     split_chunk(heap, found, 1, 80);
-
-    putstr("\n");
-    print_heap(heap);
 
     // two chunk
     t_chunk *found2 = search_free_chunk(1, 80);
@@ -45,5 +39,4 @@ void test_search_chunk(void)
 
     // size < min
     putstr("\n");
-    print_heap(heap);
 }

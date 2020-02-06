@@ -21,7 +21,8 @@ t_chunk *get_next_chunk(t_chunk *chunk);
 t_chunk *get_previous_chunk(t_chunk *chunk);
 t_chunk *get_first_chunk(t_heap *heap);
 t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, t_config_type type, size_t size);
-t_chunk *merge_chunk(t_heap *heap, t_chunk *chunk);
+//t_chunk *merge_chunk(t_heap *heap, t_chunk *chunk);
+t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk);
 t_chunk *search_free_chunk(t_config_type type, size_t size);
 
 void *get_chunk_payload(t_chunk *chunk);
