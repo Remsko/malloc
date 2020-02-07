@@ -29,6 +29,7 @@ t_chunk *get_free_chunk(size_t chunk_size)
 		return NULL;
 	chunk = get_first_chunk(heap);
 	chunk->forward = heap->size - sizeof(t_heap);
+	chunk->backward = 0;
 	split_chunk(heap, chunk, type, chunk_size);
 	return chunk;
 }
@@ -40,7 +41,7 @@ void *dynalloc(size_t size)
 	size_t chunk_size;
 
 	if (size == 0)
-		return NULL;
+		size++;
 	chunk_size = memory_align(size + sizeof(t_chunk));
 	if (chunk_size < size)
 		return NULL;

@@ -15,7 +15,8 @@ void *realloc(void *ptr, size_t size)
 		return malloc(size);
 	}
 	chunk = get_chunk_from_payload(ptr);
-	if (!chunk_is_referenced(&heap, chunk) || chunk_is_corrupt(heap, chunk))
+	t_config_type type;
+	if (!chunk_is_referenced(&heap, &type, chunk) || chunk_is_corrupt(heap, chunk))
 		return NULL;
 	if (size <= get_payload_size(chunk))
 		return ptr;

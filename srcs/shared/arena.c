@@ -31,6 +31,7 @@ t_heap **get_arena_heap_head(t_config_type type)
 	case LARGE:
 		return &arena->large;
 	default:
+		assert(1);
 		return NULL;
 	}
 }

@@ -11,6 +11,8 @@ void delete_heap(t_heap **head, t_heap *delete)
 	*head = delete->next;
 }
 
+void show_heap(t_heap *heap, t_config_type type);
+
 void release_heap_maybe(t_heap *heap, t_config_type type)
 {
 	t_heap **head;
@@ -62,7 +64,7 @@ t_heap *unshift_new_heap(t_heap **head, void *memory, size_t size)
 	return unshift_heap(head, new);
 }
 
-t_heap *search_heap(t_chunk *chunk)
+t_heap *search_heap(t_chunk *chunk, t_config_type *h_type)
 {
 	t_heap **heap[TYPES];
 	t_heap *h;
@@ -81,7 +83,10 @@ t_heap *search_heap(t_chunk *chunk)
 			{
 				not_finished = true;
 				if (chunk_is_on_heap(h, chunk))
+				{
+					*h_type = type;
 					return h;
+				}
 				heap[type] = &h->next;
 			}
 		}

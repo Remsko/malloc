@@ -35,9 +35,9 @@ void set_chunk_used(t_chunk *chunk);
 bool chunk_is_available(t_chunk *chunk, size_t s);
 bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk);
 bool chunk_is_corrupt(t_heap *heap, t_chunk *search);
-bool chunk_is_referenced(t_heap **heap, t_chunk *chunk);
+bool chunk_is_referenced(t_heap **heap, t_config_type *type, t_chunk *chunk);
 bool chunk_is_free(t_chunk *chunk);
 
-t_heap *search_heap(t_chunk *chunk);
+t_heap *search_heap(t_chunk *chunk, t_config_type *type);
 
 #endif

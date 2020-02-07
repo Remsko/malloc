@@ -1,4 +1,5 @@
 #include "test.h"
+#include <stdio.h>
 
 void multiple(void)
 {
@@ -46,6 +47,67 @@ void corrupt(void)
 	putstr(" OK\n");
 }
 
+#include <string.h>
+#include "debug.h"
+#include "chunk.h"
+int test_6_copy(void)
+{
+	void *data[5000];
+
+	for (size_t len = 0; len < 5000; len += 3)
+	{
+		char cmp[len];
+		memset(cmp, 'a', len);
+
+		for (size_t i = 1; i < 5000; i += 3)
+		{
+			data[i] = malloc(len);
+			if (data[i] == NULL)
+			{
+				print_number("fail", len);
+				return (0);
+			}
+			memset(data[i], 'a', len);
+
+			if ((uintptr_t)data[i] % 16 != 0)
+			{
+				print_number("not aligned", len);
+				return (0);
+			}
+		}
+
+		for (size_t i = 1; i < 5000; i += 3)
+		{
+			if (memcmp(cmp, data[i], len) != 0)
+			{
+				print_number("first cmp", len);
+				return (0);
+			}
+		}
+
+		for (size_t i = 1; i < 5000; i += 3)
+		{
+			if (len == 963 && i == 787)
+				// return (0);
+				if (memcmp(cmp, data[i], len) != 0)
+				{
+					print_number("second cmp", len);
+					return (0);
+				}
+
+			//print_number("len", len);
+			//print_number("i", i);
+			// if (len == 963 && i == 784)
+			// {
+			// 	show_alloc_mem();
+			// 	printf("@: 0x%lX\n", (unsigned long)((void *)data[i] - sizeof(t_chunk)));
+			// }
+			free(data[i]);
+		}
+	}
+	return (0);
+}
+
 int main(void)
 {
 	// test_search_chunk();
@@ -86,7 +148,10 @@ int main(void)
 	//multiple2();
 	// corrupt();
 
-	show_alloc_mem();
+	//show_alloc_mem();
+
+	test_6_copy();
+	test_coalesce();
 
 	return 0;
 }

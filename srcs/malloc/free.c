@@ -2,6 +2,9 @@
 #include "malloc.h"
 #include "arena.h"
 
+void show_chunk(t_chunk *chunk);
+
+#include <stdio.h>
 void free(void *ptr)
 {
 	t_heap *heap;
@@ -11,10 +14,12 @@ void free(void *ptr)
 	if (ptr == NULL)
 		return;
 	chunk = get_chunk_from_payload(ptr);
-	if (!chunk_is_referenced(&heap, chunk) || chunk_is_corrupt(heap, chunk))
+	if (!chunk_is_referenced(&heap, &type, chunk) || chunk_is_corrupt(heap, chunk))
 		return;
-	type = get_config_type(get_chunk_size(chunk));
 	set_chunk_free(chunk);
 	chunk = coalesce_chunk(heap, chunk);
+	//printf("%s : 0x%lX %zu octets\n", config_type_to_string(type), (unsigned long)heap, heap->size);
+	//show_chunk(chunk);
 	release_heap_maybe(heap, type);
+	//printf("/");
 }
