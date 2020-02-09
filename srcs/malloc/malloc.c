@@ -3,6 +3,8 @@
 #include "config.h"
 #include "arena.h"
 #include "chunk.h"
+#include "malloc.h"
+#include <pthread.h>
 
 t_chunk *get_free_chunk(size_t chunk_size)
 {
@@ -53,8 +55,12 @@ void *dynalloc(size_t size)
 	return payload;
 }
 
+pthread_mutex_t g_thread_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 void *malloc(size_t size)
 {
+	pthread_mutex_lock(&g_thread_mutex);
 	void *ptr = dynalloc(size);
+	pthread_mutex_unlock(&g_thread_mutex);
 	return ptr;
 }

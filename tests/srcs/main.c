@@ -69,7 +69,7 @@ int test_6_copy(void)
 			}
 			memset(data[i], 'a', len);
 
-			if ((uintptr_t)data[i] % 16 != 0)
+			if ((size_t)data[i] % 16 != 0)
 			{
 				print_number("not aligned", len);
 				return (0);

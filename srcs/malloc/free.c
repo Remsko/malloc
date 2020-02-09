@@ -13,6 +13,8 @@ void free(void *ptr)
 
 	if (ptr == NULL)
 		return;
+	pthread_mutex_lock(&g_thread_mutex);
+
 	chunk = get_chunk_from_payload(ptr);
 	if (!chunk_is_referenced(&heap, &type, chunk) || chunk_is_corrupt(heap, chunk))
 		return;
@@ -22,4 +24,5 @@ void free(void *ptr)
 	//show_chunk(chunk);
 	release_heap_maybe(heap, type);
 	//printf("/");
+	pthread_mutex_unlock(&g_thread_mutex);
 }
