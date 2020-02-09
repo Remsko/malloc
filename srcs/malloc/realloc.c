@@ -16,16 +16,13 @@ void *realloc(void *ptr, size_t size)
 	}
 	chunk = get_chunk_from_payload(ptr);
 	t_config_type type;
-	pthread_mutex_lock(&g_thread_mutex);
 	if (!chunk_is_referenced(&heap, &type, chunk) || chunk_is_corrupt(heap, chunk))
 		return NULL;
-	pthread_mutex_unlock(&g_thread_mutex);
 	if (size <= get_payload_size(chunk))
 		return ptr;
 	new = malloc(size);
 	if (new != NULL)
 		ft_memmove(new, get_chunk_payload(chunk), get_payload_size(chunk));
 	free(ptr);
-
 	return new;
 }

@@ -2,6 +2,7 @@
 #include "align.h"
 #include "arena.h"
 #include <stdbool.h>
+#include <assert.h>
 
 void set_chunk_free(t_chunk *chunk)
 {
@@ -77,7 +78,6 @@ void update_next_chunk(t_heap *heap, t_chunk *chunk)
 		next->backward = get_chunk_size(chunk);
 }
 
-#include <assert.h>
 t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, t_config_type type, size_t size)
 {
 	t_chunk *new;
@@ -112,41 +112,11 @@ bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 	return ((void *)chunk > start && (void *)chunk < end);
 }
 
-#include "debug.h"
-t_chunk *search_free_chunk(t_config_type type, size_t size)
-{
-	t_heap **heap;
-	t_chunk *chunk;
-
-	heap = get_arena_heap_head(type);
-	if (heap != NULL)
-	{
-		while ((*heap) != NULL)
-		{
-			chunk = get_first_chunk(*heap);
-			while (chunk_is_on_heap(*heap, chunk))
-			{
-				//print_number("chk", (size_t)chunk);
-				if (chunk_is_available(chunk, size))
-				{
-					split_chunk(*heap, chunk, type, size);
-					return chunk;
-				}
-				chunk = get_next_chunk(chunk);
-			}
-			heap = &(*heap)->next;
-		}
-	}
-	return NULL;
-}
-
 static t_chunk *merge_chunk(t_chunk *start, t_chunk *end)
 {
 	start->forward += get_chunk_size(end);
 	return start;
 }
-
-void show_chunk(t_chunk *chunk);
 
 t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk)
 {
@@ -154,34 +124,21 @@ t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk)
 	t_chunk *prev;
 	bool coalescion;
 
-	//print_string("\n[MERGING]\n");
 	coalescion = false;
 	next = get_next_chunk(chunk);
-	//show_chunk(next);
-	//print_number("next heap", chunk_is_on_heap(heap, next));
-	//print_number("next free", chunk_is_free(next));
-	//show_chunk(chunk);
-	//print_number("chk prev", chunk->backward);
 	if (chunk_is_on_heap(heap, next) && chunk_is_free(next) && next != chunk)
 	{
-		//print_string("[MERGE AFTER]");
 		coalescion = true;
 		merge_chunk(chunk, next);
 	}
 	prev = get_previous_chunk(chunk);
-	//show_chunk(prev);
-	//print_number("prev heap", chunk_is_on_heap(heap, prev));
-	//print_number("prev free", chunk_is_free(prev));
-	//print_number("prev !chunk", prev != chunk);
 	if (chunk_is_on_heap(heap, prev) && chunk_is_free(prev) && prev != chunk)
 	{
-		//print_string("[MERGE BEFORE]");
 		coalescion = true;
 		chunk = merge_chunk(prev, chunk);
 	}
 	if (coalescion)
 		update_next_chunk(heap, chunk);
-	//print_string("\n\n");
 	return chunk;
 }
 
