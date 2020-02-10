@@ -330,9 +330,7 @@ void case_segf(void)
 	chunk2 = get_next_chunk(chunk1);
 
 	set_chunk_used(chunk2);
-	show_heap(heap, 1);
 	coalesce_chunk(heap, chunk2);
-	show_heap(heap, 1);
 
 	release_heap_maybe(heap, 1);
 }
@@ -354,13 +352,13 @@ void test_coalesce(void)
 
 	//show_heap(heap, 1);
 	//show_alloc_mem();
-	// case_1();
-	// case_2();
-	// case_3();
-	// case_4();
-	// case_5();
-	// case_6();
-	// case_7();
-	// case_8();
+	case_1();
+	case_2();
+	case_3();
+	case_4();
+	case_5();
+	case_6();
+	case_7();
+	case_8();
 	case_segf();
 }

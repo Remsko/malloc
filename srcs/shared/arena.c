@@ -45,16 +45,12 @@ t_heap **get_arena_heap_by_size(size_t size)
 	return get_arena_heap_head(type);
 }
 
-t_heap *arena_unshift(t_config_type type, size_t size)
+t_heap *arena_unshift(t_heap **head, size_t size)
 {
-	t_heap **head;
 	t_heap *new;
 	void *memory;
 
 	memory = get_some_memory(size);
-	head = get_arena_heap_head(type);
-	if (memory == NULL || head == NULL)
-		return NULL;
 	new = unshift_new_heap(head, memory, size);
 	return new;
 }

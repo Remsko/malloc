@@ -69,6 +69,16 @@ t_chunk *get_first_chunk(t_heap *heap)
 	return get_chunk((void *)heap + sizeof(t_heap));
 }
 
+t_chunk *init_chunk(t_heap *heap)
+{
+	t_chunk *chunk;
+
+	chunk = get_first_chunk(heap);
+	chunk->forward = heap->size - sizeof(t_heap);
+	chunk->backward = 0;
+	return chunk;
+}
+
 void update_next_chunk(t_heap *heap, t_chunk *chunk)
 {
 	t_chunk *next;
@@ -78,21 +88,19 @@ void update_next_chunk(t_heap *heap, t_chunk *chunk)
 		next->backward = get_chunk_size(chunk);
 }
 
-t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, t_config_type type, size_t size)
+t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, size_t size)
 {
-	t_chunk *new;
-	t_config config;
+	t_chunk *split;
 	size_t rest;
 
 	assert(size <= get_chunk_size(chunk));
-	config = get_config(type);
 	rest = get_chunk_size(chunk) - size;
-	if (sizeof(t_chunk) + config.chunk_min <= rest)
+	if (sizeof(t_chunk) + 1 <= rest)
 	{
 		new_chunk((void *)chunk, size);
-		new = new_chunk((void *)chunk + size, rest);
-		new->backward = size;
-		update_next_chunk(heap, new);
+		split = new_chunk((void *)chunk + size, rest);
+		split->backward = size;
+		update_next_chunk(heap, split);
 	}
 	return chunk;
 }

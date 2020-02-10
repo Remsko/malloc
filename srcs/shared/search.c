@@ -33,27 +33,25 @@ t_heap *search_heap(t_chunk *chunk, t_config_type *h_type)
 	return NULL;
 }
 
-t_chunk *search_free_chunk(t_config_type type, size_t size)
+t_chunk *search_free_chunk(t_heap **head, size_t size)
 {
-	t_heap **heap;
 	t_chunk *chunk;
 
-	heap = get_arena_heap_head(type);
-	if (heap != NULL)
+	if (head != NULL)
 	{
-		while ((*heap) != NULL)
+		while ((*head) != NULL)
 		{
-			chunk = get_first_chunk(*heap);
-			while (chunk_is_on_heap(*heap, chunk))
+			chunk = get_first_chunk(*head);
+			while (chunk_is_on_heap(*head, chunk))
 			{
 				if (chunk_is_available(chunk, size))
 				{
-					split_chunk(*heap, chunk, type, size);
+					split_chunk(*head, chunk, size);
 					return chunk;
 				}
 				chunk = get_next_chunk(chunk);
 			}
-			heap = &(*heap)->next;
+			head = &(*head)->next;
 		}
 	}
 	return NULL;

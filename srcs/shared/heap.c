@@ -3,7 +3,7 @@
 #include "chunk.h"
 #include "arena.h"
 #include "memory.h"
-#include "malloc.h"
+#include "align.h"
 
 void delete_heap(t_heap **head, t_heap *delete)
 {
@@ -26,10 +26,14 @@ void release_heap_maybe(t_heap *heap, t_config_type type)
 	}
 }
 
-size_t get_heap_size(t_config_type type)
+size_t get_heap_size(size_t chunk_size)
 {
 	t_config config;
+	t_config_type type;
 
+	type = get_config_type(chunk_size);
+	if (type == LARGE)
+		return page_align(chunk_size + sizeof(t_heap));
 	config = get_config(type);
 	return config.heap_size;
 }
