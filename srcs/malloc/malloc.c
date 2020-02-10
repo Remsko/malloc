@@ -5,7 +5,7 @@
 #include "chunk.h"
 #include "malloc.h"
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t g_thread_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 t_chunk *get_free_chunk(t_heap **head, size_t chunk_size)
 {
@@ -49,8 +49,8 @@ void *malloc(size_t size)
 {
 	void *payload;
 
-	pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(&g_thread_mutex);
 	payload = malloc_unlocked(size);
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&g_thread_mutex);
 	return payload;
 }

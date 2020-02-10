@@ -10,12 +10,6 @@ typedef struct s_heap
 	size_t size;
 } t_heap;
 
-typedef struct s_heaplock
-{
-	pthread_mutex_t mutex;
-	t_heap *head;
-} t_heaplock;
-
 t_heap *get_heap(void *alloc);
 size_t get_heap_size(size_t chunk_size);
 t_heap *new_heap(void *alloc, size_t alloc_size);

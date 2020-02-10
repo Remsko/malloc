@@ -19,6 +19,6 @@ void *malloc_unlocked(size_t size);
 void *realloc_unlocked(void *ptr, size_t size);
 void free_unlocked(void *ptr);
 
-extern pthread_mutex_t mutex;
+extern pthread_mutex_t g_thread_mutex;
 
 #endif

@@ -5,13 +5,13 @@
 #include "malloc.h"
 #include <stdio.h>
 
-void show_chunk(t_chunk *chunk)
+static void show_chunk(t_chunk *chunk)
 {
-	//if (!chunk_is_free(chunk))
-	printf("0x%lX - 0x%lX [%u]: next(%zu octets) prev(%zu octets)\n", (unsigned long)chunk, (unsigned long)get_next_chunk(chunk), chunk_is_free(chunk), get_chunk_size(chunk), chunk->backward);
+	if (!chunk_is_free(chunk))
+		printf("0x%lX - 0x%lX [%u]: next(%zu octets) prev(%zu octets)\n", (unsigned long)chunk, (unsigned long)get_next_chunk(chunk), chunk_is_free(chunk), get_chunk_size(chunk), chunk->backward);
 }
 
-void show_heap(t_heap *heap, t_config_type type)
+static void show_heap(t_heap *heap, t_config_type type)
 {
 	t_chunk *chunk;
 
@@ -24,7 +24,7 @@ void show_heap(t_heap *heap, t_config_type type)
 	}
 }
 
-size_t show_heap_and_count(t_config_type type)
+static size_t show_heap_and_count(t_config_type type)
 {
 	t_heap **heap;
 	size_t heap_type_total;
@@ -43,7 +43,7 @@ size_t show_heap_and_count(t_config_type type)
 	return heap_type_total;
 }
 
-void show_alloc_mem(void)
+static void show_alloc_mem_unclocked(void)
 {
 	size_t total;
 
@@ -51,4 +51,11 @@ void show_alloc_mem(void)
 	for (t_config_type type = 0; type < TYPES; type++)
 		total += show_heap_and_count(type);
 	printf("Total : %zu octets\n", total);
+}
+
+void show_alloc_mem(void)
+{
+	pthread_mutex_lock(&g_thread_mutex);
+	show_alloc_mem_unclocked();
+	pthread_mutex_lock(&g_thread_mutex);
 }

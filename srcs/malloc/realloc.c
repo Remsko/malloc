@@ -30,8 +30,8 @@ void *realloc(void *ptr, size_t size)
 {
 	void *re;
 
-	pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(&g_thread_mutex);
 	re = realloc_unlocked(ptr, size);
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&g_thread_mutex);
 	return re;
 }
