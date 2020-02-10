@@ -23,6 +23,6 @@ t_heap *unshift_heap(t_heap **head, t_heap *new);
 t_heap *unshift_new_heap(t_heap **head, void *alloc, size_t alloc_size);
 
 void delete_heap(t_heap **head, t_heap *delete);
-void release_heap_maybe(t_heap *heap, t_config_type type);
+void release_heap_maybe(t_heap **head, t_heap *heap);
 
 #endif

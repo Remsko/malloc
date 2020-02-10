@@ -12,15 +12,13 @@ void delete_heap(t_heap **head, t_heap *delete)
 	*head = delete->next;
 }
 
-void release_heap_maybe(t_heap *heap, t_config_type type)
+void release_heap_maybe(t_heap **head, t_heap *heap)
 {
-	t_heap **head;
 	t_chunk *chunk;
 
 	chunk = get_first_chunk(heap);
 	if (heap->size - sizeof(t_heap) == get_chunk_size(chunk))
 	{
-		head = get_arena_heap_head(type);
 		delete_heap(head, heap);
 		release_some_memory((void *)heap, heap->size);
 	}

@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <pthread.h>
 
 #define DEBUG 1
 
@@ -13,5 +14,9 @@ void *realloc(void *ptr, size_t size);
 void *reallocf(void *ptr, size_t size);
 void free(void *ptr);
 void show_alloc_mem(void);
+
+void *dynalloc(size_t size);
+
+extern pthread_mutex_t mutex;
 
 #endif

@@ -41,5 +41,6 @@ bool chunk_is_referenced(t_heap **heap, t_config_type *type, t_chunk *chunk);
 bool chunk_is_free(t_chunk *chunk);
 
 t_heap *search_heap(t_chunk *chunk, t_config_type *type);
+bool search_heap_in_heaps(t_chunk *chunk, t_heap ***head_fnd, t_heap **heap_fnd);
 
 #endif
