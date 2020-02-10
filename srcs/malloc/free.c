@@ -11,14 +11,13 @@ void free_unlocked(void *ptr)
 	if (ptr == NULL)
 		return;
 	chunk = get_chunk_from_payload(ptr);
-	if (search_heap_in_heaps(chunk, &head, &heap))
-	{
-		if (chunk_is_corrupt(heap, chunk))
-			return;
-		set_chunk_free(chunk);
-		chunk = coalesce_chunk(heap, chunk);
-		release_heap_maybe(head, heap);
-	}
+	if (!search_heap_in_heaps(chunk, &head, &heap))
+		return;
+	if (chunk_is_corrupt(heap, chunk))
+		return;
+	set_chunk_free(chunk);
+	chunk = coalesce_chunk(heap, chunk);
+	release_heap_maybe(head, heap);
 }
 
 void free(void *ptr)
