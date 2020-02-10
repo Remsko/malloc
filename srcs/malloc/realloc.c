@@ -3,7 +3,7 @@
 #include "malloc.h"
 #include "libc.h"
 
-void *realloc(void *ptr, size_t size)
+void *realloc_unlocked(void *ptr, size_t size)
 {
 	void *new;
 	t_heap **head;
@@ -11,28 +11,27 @@ void *realloc(void *ptr, size_t size)
 	t_chunk *chunk;
 
 	if (ptr == NULL)
-		return malloc(size);
-	pthread_mutex_lock(&mutex);
+		return malloc_unlocked(size);
 	chunk = get_chunk_from_payload(ptr);
 	if (!search_heap_in_heaps(chunk, &head, &heap))
-	{
-		pthread_mutex_unlock(&mutex);
 		return NULL;
-	}
 	if (chunk_is_corrupt(heap, chunk))
-	{
-		pthread_mutex_unlock(&mutex);
 		return NULL;
-	}
 	if (size <= get_payload_size(chunk))
-	{
-		pthread_mutex_unlock(&mutex);
 		return ptr;
-	}
-	pthread_mutex_unlock(&mutex);
-	new = malloc(size);
+	new = malloc_unlocked(size);
 	if (new != NULL)
 		ft_memmove(new, get_chunk_payload(chunk), get_payload_size(chunk));
-	free(ptr);
+	free_unlocked(ptr);
 	return new;
+}
+
+void *realloc(void *ptr, size_t size)
+{
+	void *re;
+
+	pthread_mutex_lock(&mutex);
+	re = realloc_unlocked(ptr, size);
+	pthread_mutex_unlock(&mutex);
+	return re;
 }
