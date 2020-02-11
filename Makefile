@@ -60,6 +60,11 @@ OBJ_PATH = obj
 OBJ_NAME = $(SRC_NAME:%.c=%.o)
 OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME)) 
 
+LIB_PATH = Libc
+LIB = $(LIB_PATH)/libft.a
+CFLAGS += -I$(LIB_PATH)/incs
+LDFLAGS += -L $(LIB_PATH) -lft
+
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	REPLACE := ./run.sh ./test
@@ -69,8 +74,8 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $^ -shared  -o $@
+$(NAME): $(OBJ) | $(LIB)
+	$(CC) $^ -shared $(LDFLAGS) -o $@
 	ln -sf $(NAME) $(LINK)
 
 $(OBJ): $(INC) | $(OBJ_PATH)
@@ -79,6 +84,9 @@ $(OBJ): $(OBJ_PATH)/%.o: %.c
 
 $(OBJ_PATH):
 	mkdir -p $@
+
+$(LIB):
+	make -C $(LIB_PATH)
 
 clean:
 	$(RM) $(OBJ_PATH)

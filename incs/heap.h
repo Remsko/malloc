@@ -2,12 +2,17 @@
 #define HEAP_H
 
 #include "config.h"
+#include "rb_tree_42.h"
 #include <pthread.h>
 
 typedef struct s_heap
 {
-	struct s_heap *next;
+	struct s_heap *left;
+	struct s_heap *right;
+	struct s_heap *parent;
+	t_rb_color color;
 	size_t size;
+	size_t size_max_free;
 } t_heap;
 
 t_heap *get_heap(void *alloc);
