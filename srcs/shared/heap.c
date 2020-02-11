@@ -57,8 +57,7 @@ t_heap *new_heap(void *memory, size_t size)
 	return heap;
 }
 
-#include "debug.h"
-int cmp_heap(void *heap1, void *heap2)
+int cmp_heap_f(void *heap1, void *heap2)
 {
 	int ret;
 
@@ -73,7 +72,7 @@ int cmp_heap(void *heap1, void *heap2)
 
 t_heap *unshift_heap(t_heap **head, t_heap *new)
 {
-	rb_tree_heap_insert((t_rb_tree **)head, (t_rb_tree *)new, &cmp_heap);
+	rb_tree_heap_insert((t_rb_tree **)head, (t_rb_tree *)new, &cmp_heap_f);
 	return new;
 }
 

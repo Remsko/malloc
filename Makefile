@@ -56,6 +56,7 @@ SRC_NAME += ft_memset.c
 SRC_NAME += rb_tree_heap_insert.c
 SRC_NAME += rb_tree_heap_new.c
 SRC_NAME += rb_tree_heap_search.c
+SRC_NAME += rb_tree_heap_chunk_search.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 

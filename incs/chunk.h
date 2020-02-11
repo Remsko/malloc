@@ -46,4 +46,6 @@ bool search_heap_in_heaps(t_chunk *chunk, t_heap ***head_fnd, t_heap **heap_fnd)
 t_chunk *search_free_chunk(t_heap *heap, size_t size);
 t_chunk *search_free_chunk_disorder(t_heap *heap, size_t size);
 
+bool search_chunk(t_chunk *chunk, t_heap ***head_fnd, t_heap **heap_fnd);
+
 #endif

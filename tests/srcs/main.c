@@ -146,8 +146,8 @@ int main(void)
 	// test_write_free(50000);
 	// test_write_free(500000);
 
-	// multiple();
-	// multiple2();
+	multiple();
+	multiple2();
 	// corrupt();
 
 	show_alloc_mem();
