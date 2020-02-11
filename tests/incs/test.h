@@ -18,5 +18,6 @@ void test_zero_malloc_free(void);
 void test_split_chunk(void);
 void test_search_chunk(void);
 void test_search_heap(void);
+void test_coalesce(void);
 
 #endif

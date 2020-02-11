@@ -3,6 +3,7 @@
 #include "chunk.h"
 #include "arena.h"
 #include "memory.h"
+#include "align.h"
 
 void delete_heap(t_heap **head, t_heap *delete)
 {
@@ -11,24 +12,26 @@ void delete_heap(t_heap **head, t_heap *delete)
 	*head = delete->next;
 }
 
-void release_heap_maybe(t_heap *heap, t_config_type type)
+void release_heap_maybe(t_heap **head, t_heap *heap)
 {
-	t_heap **head;
 	t_chunk *chunk;
 
 	chunk = get_first_chunk(heap);
 	if (heap->size - sizeof(t_heap) == get_chunk_size(chunk))
 	{
-		head = get_arena_heap_head(type);
 		delete_heap(head, heap);
 		release_some_memory((void *)heap, heap->size);
 	}
 }
 
-size_t get_heap_size(t_config_type type)
+size_t get_heap_size(size_t chunk_size)
 {
 	t_config config;
+	t_config_type type;
 
+	type = get_config_type(chunk_size);
+	if (type == LARGE)
+		return page_align(chunk_size + sizeof(t_heap));
 	config = get_config(type);
 	return config.heap_size;
 }
@@ -60,31 +63,4 @@ t_heap *unshift_new_heap(t_heap **head, void *memory, size_t size)
 
 	new = new_heap(memory, size);
 	return unshift_heap(head, new);
-}
-
-t_heap *search_heap(t_chunk *chunk)
-{
-	t_heap **heap[TYPES];
-	t_heap *h;
-	bool not_finished;
-
-	for (t_config_type type = 0; type < TYPES; type++)
-		heap[type] = get_arena_heap_head(type);
-	not_finished = true;
-	while (not_finished)
-	{
-		not_finished = false;
-		for (t_config_type type = 0; type < TYPES; type++)
-		{
-			h = *(heap[type]);
-			if (h != NULL)
-			{
-				not_finished = true;
-				if (chunk_is_on_heap(h, chunk))
-					return h;
-				heap[type] = &h->next;
-			}
-		}
-	}
-	return NULL;
 }

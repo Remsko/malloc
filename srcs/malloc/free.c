@@ -2,19 +2,27 @@
 #include "malloc.h"
 #include "arena.h"
 
-void free(void *ptr)
+void free_unlocked(void *ptr)
 {
+	t_heap **head;
 	t_heap *heap;
 	t_chunk *chunk;
-	t_config_type type;
 
 	if (ptr == NULL)
 		return;
 	chunk = get_chunk_from_payload(ptr);
-	if (!chunk_is_referenced(&heap, chunk) || chunk_is_corrupt(heap, chunk))
+	if (!search_heap_in_heaps(chunk, &head, &heap))
 		return;
-	type = get_config_type(get_chunk_size(chunk));
+	if (chunk_is_corrupt(heap, chunk))
+		return;
 	set_chunk_free(chunk);
 	chunk = coalesce_chunk(heap, chunk);
-	release_heap_maybe(heap, type);
+	release_heap_maybe(head, heap);
+}
+
+void free(void *ptr)
+{
+	pthread_mutex_lock(&g_thread_mutex);
+	free_unlocked(ptr);
+	pthread_mutex_unlock(&g_thread_mutex);
 }

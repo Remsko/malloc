@@ -1,6 +1,6 @@
 #include "config.h"
 #include <unistd.h>
-#include "debug.h"
+#include <assert.h>
 
 static t_config config_tiny(void)
 {
@@ -73,6 +73,7 @@ char *config_type_to_string(t_config_type type)
 	case LARGE:
 		return "LARGE";
 	default:
+		assert(1);
 		return NULL;
 	}
 }

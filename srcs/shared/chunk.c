@@ -2,6 +2,7 @@
 #include "align.h"
 #include "arena.h"
 #include <stdbool.h>
+#include <assert.h>
 
 void set_chunk_free(t_chunk *chunk)
 {
@@ -29,7 +30,6 @@ t_chunk *new_chunk(void *start, size_t size)
 
 	chunk = get_chunk(start);
 	chunk->forward = size;
-	chunk->backward = 0;
 	set_chunk_free(chunk);
 	return chunk;
 }
@@ -69,6 +69,16 @@ t_chunk *get_first_chunk(t_heap *heap)
 	return get_chunk((void *)heap + sizeof(t_heap));
 }
 
+t_chunk *init_chunk(t_heap *heap)
+{
+	t_chunk *chunk;
+
+	chunk = get_first_chunk(heap);
+	chunk->forward = heap->size - sizeof(t_heap);
+	chunk->backward = 0;
+	return chunk;
+}
+
 void update_next_chunk(t_heap *heap, t_chunk *chunk)
 {
 	t_chunk *next;
@@ -78,22 +88,19 @@ void update_next_chunk(t_heap *heap, t_chunk *chunk)
 		next->backward = get_chunk_size(chunk);
 }
 
-#include <assert.h>
-t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, t_config_type type, size_t size)
+t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, size_t size)
 {
-	t_chunk *new;
-	t_config config;
+	t_chunk *split;
 	size_t rest;
 
 	assert(size <= get_chunk_size(chunk));
-	config = get_config(type);
 	rest = get_chunk_size(chunk) - size;
-	if (sizeof(t_chunk) + config.chunk_min <= rest)
+	if (sizeof(t_chunk) + 1 <= rest)
 	{
 		new_chunk((void *)chunk, size);
-		new = new_chunk((void *)chunk + size, rest);
-		new->backward = size;
-		update_next_chunk(heap, new);
+		split = new_chunk((void *)chunk + size, rest);
+		split->backward = size;
+		update_next_chunk(heap, split);
 	}
 	return chunk;
 }
@@ -113,32 +120,6 @@ bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
 	return ((void *)chunk > start && (void *)chunk < end);
 }
 
-t_chunk *search_free_chunk(t_config_type type, size_t size)
-{
-	t_heap **heap;
-	t_chunk *chunk;
-
-	heap = get_arena_heap_head(type);
-	if (heap != NULL)
-	{
-		while ((*heap) != NULL)
-		{
-			chunk = get_first_chunk(*heap);
-			while (chunk_is_on_heap(*heap, chunk))
-			{
-				if (chunk_is_available(chunk, size))
-				{
-					split_chunk(*heap, chunk, type, size);
-					return chunk;
-				}
-				chunk = get_next_chunk(chunk);
-			}
-			heap = &(*heap)->next;
-		}
-	}
-	return NULL;
-}
-
 static t_chunk *merge_chunk(t_chunk *start, t_chunk *end)
 {
 	start->forward += get_chunk_size(end);
@@ -149,14 +130,23 @@ t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk)
 {
 	t_chunk *next;
 	t_chunk *prev;
+	bool coalescion;
 
+	coalescion = false;
 	next = get_next_chunk(chunk);
-	if (chunk_is_on_heap(heap, next) && chunk_is_free(next))
-		chunk = merge_chunk(chunk, next);
+	if (chunk_is_on_heap(heap, next) && chunk_is_free(next) && next != chunk)
+	{
+		coalescion = true;
+		merge_chunk(chunk, next);
+	}
 	prev = get_previous_chunk(chunk);
 	if (chunk_is_on_heap(heap, prev) && chunk_is_free(prev) && prev != chunk)
+	{
+		coalescion = true;
 		chunk = merge_chunk(prev, chunk);
-	update_next_chunk(heap, chunk);
+	}
+	if (coalescion)
+		update_next_chunk(heap, chunk);
 	return chunk;
 }
 
@@ -176,8 +166,8 @@ bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
 	return true;
 }
 
-bool chunk_is_referenced(t_heap **heap, t_chunk *chunk)
+bool chunk_is_referenced(t_heap **heap, t_config_type *type, t_chunk *chunk)
 {
-	*heap = search_heap(chunk);
+	*heap = search_heap(chunk, type);
 	return *heap != NULL;
 }

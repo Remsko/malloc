@@ -41,6 +41,7 @@ SRC_NAME += chunk.c
 SRC_NAME += config.c
 SRC_NAME += heap.c
 SRC_NAME += memory.c
+SRC_NAME += search.c
 
 SRC_SUB += debug
 SRC_NAME += print_number.c
