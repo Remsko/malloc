@@ -4,6 +4,7 @@
 #include "arena.h"
 #include "chunk.h"
 #include "malloc.h"
+#include "debug.h"
 
 pthread_mutex_t g_thread_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -13,7 +14,7 @@ t_chunk *get_free_chunk(t_heap **head, size_t chunk_size)
 	size_t new_heap_size;
 	t_chunk *chunk;
 
-	if ((chunk = search_free_chunk(head, chunk_size)))
+	if ((chunk = search_free_chunk_disorder(*head, chunk_size)))
 		return chunk;
 	new_heap_size = get_heap_size(chunk_size);
 	if (new_heap_size < chunk_size)
@@ -22,6 +23,7 @@ t_chunk *get_free_chunk(t_heap **head, size_t chunk_size)
 	if (new_heap == NULL)
 		return NULL;
 	chunk = init_chunk(new_heap);
+	//show_chunk(chunk);
 	split_chunk(new_heap, chunk, chunk_size);
 	return chunk;
 }

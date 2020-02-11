@@ -1,10 +1,10 @@
-#include "heap.h"
 #include "rb_tree_42.h"
+#include "heap.h"
+#include "libc.h"
 
-bool rb_tree_insert(t_rb_tree **root, t_rb_tree *heap,
-                    int (*cmp_f)(t_rb_tree *, t_rb_tree *))
+bool rb_tree_heap_insert(t_rb_tree **root, t_rb_tree *heap,
+                         int (*cmp_f)(void *, void *))
 {
-    t_rb_tree *new_node;
     t_rb_tree *search;
     int diff;
 
@@ -12,21 +12,18 @@ bool rb_tree_insert(t_rb_tree **root, t_rb_tree *heap,
         return (false);
     if (*root == NULL)
     {
-        new_node->color = BLACK;
-        *root = new_node;
+        heap->color = BLACK;
+        *root = heap;
         return (true);
     }
-    search = rb_tree_search(*root, heap, cmp_f);
-    if ((diff = cmp_f(heap, search)) == 0)
-    {
-        free(new_node);
+    search = rb_tree_heap_search(*root, heap, cmp_f);
+    if ((diff = cmp_f((void *)heap, (void *)search)) == 0)
         return (false);
-    }
-    new_node->parent = search;
+    heap->parent = search;
     if (diff < 0)
-        search->left = new_node;
+        search->left = heap;
     else
-        search->right = new_node;
-    rb_tree_fixredred(root, new_node);
+        search->right = heap;
+    rb_tree_fixredred(root, heap);
     return (true);
 }

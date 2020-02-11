@@ -113,42 +113,44 @@ int main(void)
 	//test_search_chunk();
 	//test_search_heap();
 
-	test_free_null();
-	test_oversized_malloc();
-	test_zero_malloc();
-	test_zero_malloc_free();
+	// test_free_null();
+	// test_oversized_malloc();
+	// test_zero_malloc();
+	// test_zero_malloc_free();
 
-	test_simple(5);
-	test_simple(500);
-	test_simple(5000);
-	test_simple(50000);
-	test_simple(500000);
-	test_simple(4096 * 2);
-	test_simple(4096 * 4);
-	test_simple(4096 * 8);
-	test_simple(4096 * 16);
+	//print_string("before test\n");
+	// test_simple(5);
+	// test_simple(500);
+	// test_simple(5000);
+	// test_simple(50000);
+	// test_simple(500000);
+	// test_simple(4096 * 2);
+	// test_simple(4096 * 4);
+	// test_simple(4096 * 8);
+	// test_simple(4096 * 16);
 
-	test_simple_free(500);
-	test_simple_free(5000);
-	test_simple_free(50000);
-	test_simple_free(500000);
-	test_simple_free(4096);
-	test_simple_free(4096 * 2);
-	test_simple_free(4096 * 4);
-	test_simple_free(4096 * 8);
-	test_simple_free(4096 * 16);
+	//print_string("after test\n");
+	// test_simple_free(500);
+	// test_simple_free(5000);
+	// test_simple_free(50000);
+	// test_simple_free(500000);
+	// test_simple_free(4096);
+	// test_simple_free(4096 * 2);
+	// test_simple_free(4096 * 4);
+	// test_simple_free(4096 * 8);
+	// test_simple_free(4096 * 16);
 
-	test_write_free(5);
-	test_write_free(500);
-	test_write_free(5000);
-	test_write_free(50000);
-	test_write_free(500000);
+	// test_write_free(5);
+	// test_write_free(500);
+	// test_write_free(5000);
+	// test_write_free(50000);
+	// test_write_free(500000);
 
-	multiple();
-	multiple2();
-	corrupt();
+	// multiple();
+	// multiple2();
+	// corrupt();
 
-	//show_alloc_mem();
+	show_alloc_mem();
 
 	//test_6_copy();
 	//test_coalesce();

@@ -1,8 +1,8 @@
 #include "heap.h"
 #include "rb_tree_42.h"
 
-t_rb_tree *rb_tree_search(t_rb_tree *root, t_rb_tree *heap,
-                          int (*cmp_f)(t_rb_tree *, t_rb_tree *))
+t_rb_tree *rb_tree_heap_search(t_rb_tree *root, t_rb_tree *heap,
+                               int (*cmp_f)(void *, void *))
 {
     t_rb_tree *iter;
     int diff;
@@ -10,7 +10,7 @@ t_rb_tree *rb_tree_search(t_rb_tree *root, t_rb_tree *heap,
     iter = root;
     while (iter != NULL)
     {
-        diff = cmp_f(heap, iter);
+        diff = cmp_f((void *)heap, (void *)iter);
         if (diff < 0)
         {
             if (iter->left == NULL)

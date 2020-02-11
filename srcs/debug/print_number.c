@@ -8,11 +8,11 @@ void ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-int ft_putnbr(size_t n)
+int putnbr2(size_t n)
 {
 	if (n >= 10)
 	{
-		ft_putnbr(n / 10);
+		putnbr2(n / 10);
 		ft_putchar(n % 10 + '0');
 	}
 	if (n < 10)
@@ -26,6 +26,6 @@ void print_number(char *input, size_t nb)
 {
 	print_string(input);
 	print_string(": ");
-	ft_putnbr(nb);
+	putnbr2(nb);
 	print_string(";\n");
 }

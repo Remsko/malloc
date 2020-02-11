@@ -10,9 +10,9 @@ typedef struct s_heap
 	struct s_heap *left;
 	struct s_heap *right;
 	struct s_heap *parent;
-	t_rb_color color;
 	size_t size;
-	size_t size_max_free;
+	t_rb_color color;
+	char padding[8];
 } t_heap;
 
 t_heap *get_heap(void *alloc);

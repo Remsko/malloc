@@ -46,13 +46,16 @@ SRC_NAME += search.c
 SRC_SUB += debug
 SRC_NAME += print_number.c
 SRC_NAME += print_string.c
-SRC_NAME += print_heap.c
+#SRC_NAME += print_heap.c
 
 SRC_SUB += libc
 SRC_NAME += ft_bzero.c
 SRC_NAME += ft_memcpy.c
 SRC_NAME += ft_memmove.c
 SRC_NAME += ft_memset.c
+SRC_NAME += rb_tree_heap_insert.c
+SRC_NAME += rb_tree_heap_new.c
+SRC_NAME += rb_tree_heap_search.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
@@ -60,10 +63,15 @@ OBJ_PATH = obj
 OBJ_NAME = $(SRC_NAME:%.c=%.o)
 OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME)) 
 
-LIB_PATH = Libc
-LIB = $(LIB_PATH)/libft.a
-CFLAGS += -I$(LIB_PATH)/incs
-LDFLAGS += -L $(LIB_PATH) -lft
+LIBFT_PATH = Libc
+LIBFT = $(LIBFT_PATH)/libft.a
+CFLAGS += -I$(LIBFT_PATH)/incs
+LDFLAGS += -L $(LIBFT_PATH) -lft
+
+LIBPF_PATH = ft_printf
+LIBPF = $(LIBPF_PATH)/libftprintf.a
+CFLAGS += -I$(LIBPF_PATH)/incs
+LDFLAGS += -L $(LIBPF_PATH) -lftprintf
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
@@ -74,7 +82,7 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(OBJ) | $(LIB)
+$(NAME): $(OBJ) | $(LIBFT)
 	$(CC) $^ -shared $(LDFLAGS) -o $@
 	ln -sf $(NAME) $(LINK)
 
@@ -86,7 +94,8 @@ $(OBJ_PATH):
 	mkdir -p $@
 
 $(LIB):
-	make -C $(LIB_PATH)
+	make -C $(LIBFT_PATH)
+	make -C $(LIBPF_PATH)
 
 clean:
 	$(RM) $(OBJ_PATH)

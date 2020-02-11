@@ -24,7 +24,7 @@ t_chunk *get_previous_chunk(t_chunk *chunk);
 t_chunk *get_first_chunk(t_heap *heap);
 t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, size_t size);
 t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk);
-t_chunk *search_free_chunk(t_heap **head, size_t size);
+//t_chunk *search_free_chunk(t_heap **head, size_t size);
 
 void *get_chunk_payload(t_chunk *chunk);
 
@@ -42,5 +42,8 @@ bool chunk_is_free(t_chunk *chunk);
 
 t_heap *search_heap(t_chunk *chunk, t_config_type *type);
 bool search_heap_in_heaps(t_chunk *chunk, t_heap ***head_fnd, t_heap **heap_fnd);
+
+t_chunk *search_free_chunk(t_heap *heap, size_t size);
+t_chunk *search_free_chunk_disorder(t_heap *heap, size_t size);
 
 #endif
