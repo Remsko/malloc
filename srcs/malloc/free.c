@@ -1,6 +1,7 @@
 #include "chunk.h"
 #include "malloc.h"
 #include "arena.h"
+#include "debug.h"
 
 void free_unlocked(void *ptr)
 {

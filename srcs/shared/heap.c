@@ -5,30 +5,25 @@
 #include "memory.h"
 #include "align.h"
 #include "libc.h"
-#include "ft_printf.h"
+#include "rb_tree_42.h"
+#include "debug.h"
 
-// void delete_heap(t_heap **head, t_heap *delete)
-// {
-// 	while ((*head) != delete)
-// 		head = &(*head)->next;
-// 	*head = delete->next;
-// }
+void del(t_rb_tree *rb)
+{
+	release_some_memory((void *)rb, ((t_heap *)rb)->size);
+}
 
 void release_heap_maybe(t_heap **head, t_heap *heap)
 {
 	t_chunk *chunk;
 
-	chunk = get_first_chunk(heap);
-	(void)chunk;
-	(void)heap;
 	(void)head;
-	/*
+	chunk = get_first_chunk(heap);
 	if (heap->size - sizeof(t_heap) == get_chunk_size(chunk))
 	{
-		delete_heap(head, heap);
+		rb_tree_delete_node((t_rb_tree **)head, (t_rb_tree *)heap, &del);
 		release_some_memory((void *)heap, heap->size);
 	}
-	*/
 }
 
 size_t get_heap_size(size_t chunk_size)

@@ -53,10 +53,11 @@ SRC_NAME += ft_bzero.c
 SRC_NAME += ft_memcpy.c
 SRC_NAME += ft_memmove.c
 SRC_NAME += ft_memset.c
-SRC_NAME += rb_tree_heap_insert.c
-SRC_NAME += rb_tree_heap_new.c
-SRC_NAME += rb_tree_heap_search.c
-SRC_NAME += rb_tree_heap_chunk_search.c
+# SRC_NAME += rb_tree_heap_new.c
+# SRC_NAME += rb_tree_heap_insert.c
+# SRC_NAME += rb_tree_heap_search.c
+# SRC_NAME += rb_tree_heap_delete.c
+# SRC_NAME += rb_tree_heap_chunk_search.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
@@ -64,10 +65,10 @@ OBJ_PATH = obj
 OBJ_NAME = $(SRC_NAME:%.c=%.o)
 OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME)) 
 
-LIBFT_PATH = Libc
-LIBFT = $(LIBFT_PATH)/libft.a
-CFLAGS += -I$(LIBFT_PATH)/incs
-LDFLAGS += -L $(LIBFT_PATH) -lft
+# LIBFT_PATH = Libc
+# LIBFT = $(LIBFT_PATH)/libft.a
+# CFLAGS += -I$(LIBFT_PATH)/incs
+# LDFLAGS += -L $(LIBFT_PATH) -lft
 
 LIBPF_PATH = ft_printf
 LIBPF = $(LIBPF_PATH)/libftprintf.a
@@ -83,7 +84,7 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(OBJ) | $(LIBFT)
+$(NAME): $(OBJ) | $(LIBPF)
 	$(CC) $^ -shared $(LDFLAGS) -o $@
 	ln -sf $(NAME) $(LINK)
 
