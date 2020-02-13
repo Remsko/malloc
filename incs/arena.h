@@ -19,9 +19,9 @@ typedef struct s_arena_tree
 	t_heap_tree large;
 } t_arena_tree;
 
-// t_arena *get_arena_singletone(void);
-// t_heap **get_arena_heap_head(t_config_type type);
-// t_heap **get_arena_heap_by_size(size_t size);
-// t_heap *arena_unshift(t_heap **head, size_t size);
+t_arena_tree *get_arena_singletone(void);
+t_heap_tree *get_arena_heap_tree(t_config_type type);
+t_heap_tree *get_arena_heap_tree_by_size(size_t size);
+t_heap_node *arena_unshift(t_heap_tree *tree, size_t size);
 
 #endif

@@ -119,15 +119,15 @@ int main(void)
 	// test_zero_malloc_free();
 
 	//print_string("before test\n");
-	// test_simple(5);
-	// test_simple(500);
-	// test_simple(5000);
-	// test_simple(50000);
-	// test_simple(500000);
-	// test_simple(4096 * 2);
-	// test_simple(4096 * 4);
-	// test_simple(4096 * 8);
-	// test_simple(4096 * 16);
+	test_simple(5);
+	test_simple(500);
+	test_simple(5000);
+	test_simple(50000);
+	test_simple(500000);
+	test_simple(4096 * 2);
+	test_simple(4096 * 4);
+	test_simple(4096 * 8);
+	test_simple(4096 * 16);
 
 	//print_string("after test\n");
 	// test_simple_free(500);
@@ -150,7 +150,7 @@ int main(void)
 	// multiple2();
 	// corrupt();
 
-	test_6_copy();
+	//test_6_copy();
 	show_alloc_mem();
 	//test_coalesce();
 

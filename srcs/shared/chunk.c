@@ -64,22 +64,22 @@ size_t get_payload_size(t_chunk *chunk)
 	return get_chunk_size(chunk) - sizeof(t_chunk);
 }
 
-t_chunk *get_first_chunk(t_heap *heap)
+t_chunk *get_first_chunk(t_heap_node *heap)
 {
-	return get_chunk((void *)heap + sizeof(t_heap));
+	return get_chunk((void *)heap + sizeof(t_heap_node));
 }
 
-t_chunk *init_chunk(t_heap *heap)
+t_chunk *init_chunk(t_heap_node *heap)
 {
 	t_chunk *chunk;
 
 	chunk = get_first_chunk(heap);
-	chunk->forward = heap->size - sizeof(t_heap);
+	chunk->forward = heap->size - sizeof(t_heap_node);
 	chunk->backward = 0;
 	return chunk;
 }
 
-void update_next_chunk(t_heap *heap, t_chunk *chunk)
+void update_next_chunk(t_heap_node *heap, t_chunk *chunk)
 {
 	t_chunk *next;
 
@@ -88,7 +88,7 @@ void update_next_chunk(t_heap *heap, t_chunk *chunk)
 		next->backward = get_chunk_size(chunk);
 }
 
-t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, size_t size)
+t_chunk *split_chunk(t_heap_node *heap, t_chunk *chunk, size_t size)
 {
 	t_chunk *split;
 	size_t rest;
@@ -110,7 +110,7 @@ bool chunk_is_available(t_chunk *chunk, size_t s)
 	return chunk_is_free(chunk) && s <= get_chunk_size(chunk);
 }
 
-bool chunk_is_on_heap(t_heap *heap, t_chunk *chunk)
+bool chunk_is_on_heap(t_heap_node *heap, t_chunk *chunk)
 {
 	void *start;
 	void *end;
@@ -126,7 +126,7 @@ static t_chunk *merge_chunk(t_chunk *start, t_chunk *end)
 	return start;
 }
 
-t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk)
+t_chunk *coalesce_chunk(t_heap_node *heap, t_chunk *chunk)
 {
 	t_chunk *next;
 	t_chunk *prev;
@@ -150,7 +150,7 @@ t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk)
 	return chunk;
 }
 
-bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
+bool chunk_is_corrupt(t_heap_node *heap, t_chunk *search)
 {
 	t_chunk *compare;
 

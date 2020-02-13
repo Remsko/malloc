@@ -27,11 +27,11 @@ SRC_PATH = srcs
 
 SRC_SUB += malloc
 SRC_NAME += malloc.c
-SRC_NAME += free.c
-SRC_NAME += calloc.c
-SRC_NAME += valloc.c
-SRC_NAME += realloc.c
-SRC_NAME += reallocf.c
+# SRC_NAME += free.c
+# SRC_NAME += calloc.c
+# SRC_NAME += valloc.c
+# SRC_NAME += realloc.c
+# SRC_NAME += reallocf.c
 SRC_NAME += show_alloc_mem.c
 
 SRC_SUB += shared
@@ -41,7 +41,7 @@ SRC_NAME += chunk.c
 SRC_NAME += config.c
 SRC_NAME += heap.c
 SRC_NAME += memory.c
-SRC_NAME += search.c
+# SRC_NAME += search.c
 
 SRC_SUB += debug
 SRC_NAME += print_number.c
@@ -58,6 +58,13 @@ SRC_NAME += ft_memset.c
 # SRC_NAME += rb_tree_heap_search.c
 # SRC_NAME += rb_tree_heap_delete.c
 # SRC_NAME += rb_tree_heap_chunk_search.c
+
+SRC_SUB += rb_tree
+SRC_NAME += rb_tree_delete.c
+SRC_NAME += rb_tree_delete_fixup.c
+SRC_NAME += rb_tree_insert.c
+SRC_NAME += rb_tree_insert_fixup.c
+SRC_NAME += rb_tree_rotate.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 

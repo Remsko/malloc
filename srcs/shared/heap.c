@@ -5,24 +5,23 @@
 #include "memory.h"
 #include "align.h"
 #include "libc.h"
-#include "rb_tree_42.h"
 #include "debug.h"
 
-void del(t_rb_tree *rb)
-{
-	release_some_memory((void *)rb, ((t_heap *)rb)->size);
-}
+// void del(t_rb_tree *rb)
+// {
+// 	release_some_memory((void *)rb, ((t_heap *)rb)->size);
+// }
 
-void release_heap_maybe(t_heap **head, t_heap *heap)
+void release_heap_maybe(t_heap_tree *tree, t_heap_node *heap)
 {
 	t_chunk *chunk;
 
-	(void)head;
+	(void)tree;
 	chunk = get_first_chunk(heap);
-	if (heap->size - sizeof(t_heap) == get_chunk_size(chunk))
+	if (heap->size - sizeof(t_heap_node) == get_chunk_size(chunk))
 	{
-		rb_tree_delete_node((t_rb_tree **)head, (t_rb_tree *)heap, &del);
-		release_some_memory((void *)heap, heap->size);
+		//rb_tree_delete_node((t_rb_tree **)head, (t_rb_tree *)heap, &del);
+		//release_some_memory((void *)heap, heap->size);
 	}
 }
 
@@ -33,49 +32,54 @@ size_t get_heap_size(size_t chunk_size)
 
 	type = get_config_type(chunk_size);
 	if (type == LARGE)
-		return page_align(chunk_size + sizeof(t_heap));
+		return page_align(chunk_size + sizeof(t_heap_node));
 	config = get_config(type);
 	return config.heap_size;
 }
 
-t_heap *get_heap(void *memory)
+t_heap_node *get_heap(void *memory)
 {
-	return (t_heap *)memory;
+	return (t_heap_node *)memory;
 }
 
-t_heap *new_heap(void *memory, size_t size)
+t_heap_node *new_heap(void *memory, size_t size)
 {
-	t_heap *heap;
+	t_heap_node *heap;
 
 	heap = get_heap(memory);
 	heap->size = size;
 	return heap;
 }
 
-int cmp_heap_f(void *heap1, void *heap2)
-{
-	int ret;
+// int cmp_heap_f(void *heap1, void *heap2)
+// {
+// 	int ret;
 
-	if (heap1 < heap2)
-		ret = -1;
-	else if (heap1 > heap2)
-		ret = 1;
-	else
-		ret = 0;
-	return ret;
+// 	if (heap1 < heap2)
+// 		ret = -1;
+// 	else if (heap1 > heap2)
+// 		ret = 1;
+// 	else
+// 		ret = 0;
+// 	return ret;
+// }
+
+int cmp_ptr(t_rb_node *n1, t_rb_node *n2)
+{
+	return (void *)n1 < (void *)n2;
 }
 
-t_heap *unshift_heap(t_heap **head, t_heap *new)
+t_heap_node *unshift_heap(t_heap_tree *tree, t_heap_node *new)
 {
-	rb_tree_heap_insert((t_rb_tree **)head, (t_rb_tree *)new, &cmp_heap_f);
+	insertNode((t_rb_tree *)tree, (t_rb_node *)new, &cmp_ptr);
 	return new;
 }
 
-t_heap *unshift_new_heap(t_heap **head, void *memory, size_t size)
+t_heap_node *unshift_new_heap(t_heap_tree *tree, void *memory, size_t size)
 {
-	t_heap *new;
+	t_heap_node *new;
 
-	new = rb_tree_heap_new(memory, size);
-	unshift_heap(head, new);
+	new = new_heap(memory, size);
+	unshift_heap(tree, new);
 	return new;
 }

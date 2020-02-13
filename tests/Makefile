@@ -38,12 +38,6 @@ LIB = $(LIB_PATH)libft_malloc.so
 CFLAGS += -I$(LIB_PATH)incs
 LDFLAGS += -L./$(LIB_PATH) -lft_malloc
 
-
-LIBFT_PATH = ../Libc
-LIBFT = $(LIBFT_PATH)/libft.a
-CFLAGS += -I$(LIBFT_PATH)/incs
-LDFLAGS += -L $(LIBFT_PATH) -lft
-
 all: $(NAME)
 
 

@@ -18,7 +18,7 @@ void show_chunk(t_chunk *chunk)
 			  chunk->backward);
 }
 
-void show_heap(t_heap *heap, t_config_type type)
+void show_heap(t_heap_node *heap, t_config_type type)
 {
 	t_chunk *chunk;
 
@@ -35,26 +35,26 @@ void show_heap(t_heap *heap, t_config_type type)
 	}
 }
 
-size_t show_heap_inorder(t_heap *heap, t_config_type type)
+size_t show_heap_inorder(t_heap_tree *tree, t_heap_node *heap, t_config_type type)
 {
 	size_t total;
 
-	if (heap == NULL)
+	if (heap == tree->nil)
 		return 0;
 	total = heap->size;
-	total += show_heap_inorder(heap->left, type);
+	total += show_heap_inorder(tree, heap->left, type);
 	show_heap(heap, type);
-	total += show_heap_inorder(heap->right, type);
+	total += show_heap_inorder(tree, heap->right, type);
 	return total;
 }
 
 size_t show_heap_and_count(t_config_type type)
 {
-	t_heap **heap;
+	t_heap_tree *tree;
 
-	heap = get_arena_heap_head(type);
-	if (heap != NULL)
-		return show_heap_inorder(*heap, type);
+	tree = get_arena_heap_tree(type);
+	if (tree != NULL)
+		return show_heap_inorder(tree, tree->root, type);
 	return 0;
 }
 

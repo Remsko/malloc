@@ -8,14 +8,14 @@
 
 pthread_mutex_t g_thread_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-t_chunk *get_free_chunk(t_heap **head, size_t chunk_size)
+t_chunk *get_free_chunk(t_heap_tree *head, size_t chunk_size)
 {
-	t_heap *new_heap;
+	t_heap_node *new_heap;
 	size_t new_heap_size;
 	t_chunk *chunk;
 
-	if ((chunk = search_free_chunk_disorder(*head, chunk_size)))
-		return chunk;
+	//if ((chunk = search_free_chunk_disorder(*head, chunk_size)))
+	//	return chunk;
 	new_heap_size = get_heap_size(chunk_size);
 	if (new_heap_size < chunk_size)
 		return NULL;
@@ -30,7 +30,7 @@ t_chunk *get_free_chunk(t_heap **head, size_t chunk_size)
 
 void *malloc_unlocked(size_t size)
 {
-	t_heap **head;
+	t_heap_tree *tree;
 	t_chunk *chunk;
 	size_t chunk_size;
 
@@ -39,8 +39,8 @@ void *malloc_unlocked(size_t size)
 	chunk_size = memory_align(size + sizeof(t_chunk));
 	if (chunk_size < size)
 		return NULL;
-	head = get_arena_heap_by_size(chunk_size);
-	chunk = get_free_chunk(head, chunk_size);
+	tree = get_arena_heap_tree_by_size(chunk_size);
+	chunk = get_free_chunk(tree, chunk_size);
 	if (chunk == NULL)
 		return NULL;
 	set_chunk_used(chunk);
