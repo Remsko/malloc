@@ -1,7 +1,8 @@
 #include "rb_tree.h"
 #include <stdlib.h>
+#include "string.h"
 
-void deleteNode(t_rb_tree *t, t_rb_node *z)
+void deleteNode(t_rb_tree *t, t_rb_node *z, void (*del)(t_rb_node *))
 {
     t_rb_node *x, *y;
 
@@ -42,10 +43,14 @@ void deleteNode(t_rb_tree *t, t_rb_node *z)
         t->root = x;
 
     if (y != z)
-        z->data = y->data;
+    {
+        size_t tmp = y->size;
+        memcpy(y, z, sizeof(t_rb_node));
+        y->size = tmp;
+        del(z);
+        if (y->color == BLACK)
+            deleteFixup(t, x);
+    }
 
-    if (y->color == BLACK)
-        deleteFixup(t, x);
-
-    free(y);
+    del(y);
 }

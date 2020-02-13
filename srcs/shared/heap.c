@@ -6,22 +6,24 @@
 #include "align.h"
 #include "libc.h"
 #include "debug.h"
+#include "ft_printf.h"
 
-// void del(t_rb_tree *rb)
-// {
-// 	release_some_memory((void *)rb, ((t_heap *)rb)->size);
-// }
+void del(t_rb_node *node)
+{
+	t_heap_node *heap;
+
+	heap = (t_heap_node *)node;
+	release_some_memory((void *)heap, heap->size);
+}
 
 void release_heap_maybe(t_heap_tree *tree, t_heap_node *heap)
 {
 	t_chunk *chunk;
 
-	(void)tree;
 	chunk = get_first_chunk(heap);
 	if (heap->size - sizeof(t_heap_node) == get_chunk_size(chunk))
 	{
-		//rb_tree_delete_node((t_rb_tree **)head, (t_rb_tree *)heap, &del);
-		//release_some_memory((void *)heap, heap->size);
+		deleteNode((t_rb_tree *)tree, (t_rb_node *)heap, del);
 	}
 }
 
@@ -64,14 +66,16 @@ t_heap_node *new_heap(void *memory, size_t size)
 // 	return ret;
 // }
 
-int cmp_ptr(t_rb_node *n1, t_rb_node *n2)
+static int cmp_ptr(t_rb_node *n1, t_rb_node *n2)
 {
 	return (void *)n1 < (void *)n2;
 }
-
+#include "ft_printf.h"
 t_heap_node *unshift_heap(t_heap_tree *tree, t_heap_node *new)
 {
+	//ft_printf("shift1");
 	insertNode((t_rb_tree *)tree, (t_rb_node *)new, &cmp_ptr);
+	//ft_printf("shift2");
 	return new;
 }
 

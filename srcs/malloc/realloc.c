@@ -3,18 +3,19 @@
 #include "malloc.h"
 #include "libc.h"
 #include "debug.h"
+#include "ft_printf.h"
 
 void *realloc_unlocked(void *ptr, size_t size)
 {
 	void *new;
-	t_heap **head;
-	t_heap *heap;
+	t_heap_tree *tree;
+	t_heap_node *heap;
 	t_chunk *chunk;
 
 	if (ptr == NULL)
 		return malloc_unlocked(size);
 	chunk = get_chunk_from_payload(ptr);
-	if (!search_chunk(chunk, &head, &heap))
+	if (!search_chunk(chunk, &tree, &heap))
 		return NULL;
 	if (chunk_is_corrupt(heap, chunk))
 		return NULL;
@@ -31,8 +32,11 @@ void *realloc(void *ptr, size_t size)
 {
 	void *re;
 
+	ft_printf("R IN\n");
 	pthread_mutex_lock(&g_thread_mutex);
 	re = realloc_unlocked(ptr, size);
 	pthread_mutex_unlock(&g_thread_mutex);
+	ft_printf("R OUT\n");
+
 	return re;
 }

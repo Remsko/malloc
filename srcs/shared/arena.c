@@ -5,7 +5,7 @@
 #include "memory.h"
 #include "malloc.h"
 
-t_rb_node g_nil = {0, 0, 0, 0, BLACK};
+t_rb_node g_nil = {0, 0, 0, 0, BLACK, {'a', 'b', 'c', 'd', 'e'}};
 
 t_arena_tree *get_arena_singletone(void)
 {

@@ -52,14 +52,14 @@ void corrupt(void)
 #include "chunk.h"
 int test_6_copy(void)
 {
-	void *data[5000];
+	void *data[1000];
 
-	for (size_t len = 0; len < 5000; len += 3)
+	for (size_t len = 0; len < 1000; len += 3)
 	{
 		char cmp[len];
 		memset(cmp, 'a', len);
 
-		for (size_t i = 1; i < 5000; i += 3)
+		for (size_t i = 1; i < 1000; i += 3)
 		{
 			data[i] = malloc(len);
 			if (data[i] == NULL)
@@ -76,7 +76,7 @@ int test_6_copy(void)
 			}
 		}
 
-		for (size_t i = 1; i < 5000; i += 3)
+		for (size_t i = 1; i < 1000; i += 3)
 		{
 			if (memcmp(cmp, data[i], len) != 0)
 			{
@@ -85,7 +85,7 @@ int test_6_copy(void)
 			}
 		}
 
-		for (size_t i = 1; i < 5000; i += 3)
+		for (size_t i = 1; i < 1000; i += 3)
 		{
 			if (len == 963 && i == 787)
 				// return (0);
@@ -118,18 +118,18 @@ int main(void)
 	// test_zero_malloc();
 	// test_zero_malloc_free();
 
-	//print_string("before test\n");
-	test_simple(5);
-	test_simple(500);
-	test_simple(5000);
-	test_simple(50000);
-	test_simple(500000);
-	test_simple(4096 * 2);
-	test_simple(4096 * 4);
-	test_simple(4096 * 8);
-	test_simple(4096 * 16);
+	// // print_string("before test\n");
+	// test_simple(5);
+	// test_simple(500);
+	// test_simple(500);
+	// test_simple(50000);
+	// test_simple(500000);
+	// test_simple(4096 * 2);
+	// test_simple(4096 * 4);
+	// test_simple(4096 * 8);
+	// test_simple(4096 * 16);
 
-	//print_string("after test\n");
+	// print_string("after test\n");
 	// test_simple_free(500);
 	// test_simple_free(5000);
 	// test_simple_free(50000);
@@ -148,10 +148,10 @@ int main(void)
 
 	// multiple();
 	// multiple2();
-	// corrupt();
+	//corrupt();
 
-	//test_6_copy();
-	show_alloc_mem();
+	test_6_copy();
+	//show_alloc_mem();
 	//test_coalesce();
 
 	return 0;

@@ -1,6 +1,8 @@
 #ifndef RB_TREE
 #define RB_TREE
 
+#include <stddef.h>
+
 typedef enum e_node_color
 {
     BLACK,
@@ -12,8 +14,9 @@ typedef struct s_rb_node
     struct s_rb_node *left;
     struct s_rb_node *right;
     struct s_rb_node *parent;
-    void *data;
+    size_t size;
     t_node_color color;
+    char padding[8];
 } t_rb_node;
 
 typedef struct s_rb_tree
@@ -31,6 +34,6 @@ void insertFixup(t_rb_tree *t, t_rb_node *x);
 t_rb_node *insertNode(t_rb_tree *t, t_rb_node *x, int (*cmp)(t_rb_node *, t_rb_node *));
 
 void deleteFixup(t_rb_tree *t, t_rb_node *x);
-void deleteNode(t_rb_tree *t, t_rb_node *z);
+void deleteNode(t_rb_tree *t, t_rb_node *z, void (*del)(t_rb_node *));
 
 #endif
