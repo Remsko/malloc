@@ -33,6 +33,7 @@ SRC_NAME += valloc.c
 SRC_NAME += realloc.c
 SRC_NAME += reallocf.c
 SRC_NAME += show_alloc_mem.c
+SRC_NAME += show_alloc_mem_ex.c
 
 SRC_SUB += shared
 SRC_NAME += align.c
@@ -60,6 +61,11 @@ OBJ_PATH = obj
 OBJ_NAME = $(SRC_NAME:%.c=%.o)
 OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME)) 
 
+LIBPF_PATH = ft_printf
+LIBPF = $(LIBPF_PATH)/libftprintf.a
+CFLAGS += -I$(LIBPF_PATH)/incs
+LDFLAGS += -L $(LIBPF_PATH) -lftprintf
+
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	REPLACE := ./run.sh ./test
@@ -69,8 +75,8 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $^ -shared  -o $@
+$(NAME): $(OBJ) | $(LIBPF)
+	$(CC) $^ -shared $(LDFLAGS) -o $@
 	ln -sf $(NAME) $(LINK)
 
 $(OBJ): $(INC) | $(OBJ_PATH)

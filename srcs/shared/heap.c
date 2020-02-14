@@ -50,17 +50,31 @@ t_heap *new_heap(void *memory, size_t size)
 	return heap;
 }
 
-t_heap *unshift_heap(t_heap **head, t_heap *new)
+t_heap *insert_heap(t_heap **head, t_heap *new)
 {
-	new->next = (*head);
-	(*head) = new;
+	t_heap *current;
+
+	if (*head == NULL || (void *)*head > (void *)new)
+	{
+		new->next = *head;
+		*head = new;
+	}
+	else
+	{
+		current = *head;
+		while (current->next != NULL && (void *)current->next < (void *)new)
+			current = current->next;
+		new->next = current->next;
+		current->next = new;
+	}
 	return new;
 }
 
-t_heap *unshift_new_heap(t_heap **head, void *memory, size_t size)
+t_heap *insert_new_heap(t_heap **head, void *memory, size_t size)
 {
 	t_heap *new;
 
 	new = new_heap(memory, size);
-	return unshift_heap(head, new);
+	insert_heap(head, new);
+	return new;
 }

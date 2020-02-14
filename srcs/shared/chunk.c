@@ -165,9 +165,3 @@ bool chunk_is_corrupt(t_heap *heap, t_chunk *search)
 	}
 	return true;
 }
-
-bool chunk_is_referenced(t_heap **heap, t_config_type *type, t_chunk *chunk)
-{
-	*heap = search_heap(chunk, type);
-	return *heap != NULL;
-}

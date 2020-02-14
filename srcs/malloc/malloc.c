@@ -18,7 +18,7 @@ t_chunk *get_free_chunk(t_heap **head, size_t chunk_size)
 	new_heap_size = get_heap_size(chunk_size);
 	if (new_heap_size < chunk_size)
 		return NULL;
-	new_heap = arena_unshift(head, new_heap_size);
+	new_heap = arena_insert(head, new_heap_size);
 	if (new_heap == NULL)
 		return NULL;
 	chunk = init_chunk(new_heap);
