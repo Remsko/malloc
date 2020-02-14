@@ -146,9 +146,9 @@ int main(void)
 
 	// multiple();
 	// multiple2();
-	// corrupt();
+	corrupt();
 
-	show_alloc_mem_ex();
+	//show_alloc_mem_ex();
 
 	//test_6_copy();
 	//test_coalesce();

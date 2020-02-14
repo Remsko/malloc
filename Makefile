@@ -54,6 +54,7 @@ SRC_NAME += ft_bzero.c
 SRC_NAME += ft_memcpy.c
 SRC_NAME += ft_memmove.c
 SRC_NAME += ft_memset.c
+SRC_NAME += ft_strcmp.c
 
 vpath %.c $(addprefix $(SRC_PATH)/, $(SRC_SUB))
 
