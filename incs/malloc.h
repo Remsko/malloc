@@ -1,11 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   malloc.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpinoit <rpinoit@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/14 14:29:16 by rpinoit           #+#    #+#             */
+/*   Updated: 2020/02/14 14:32:58 by rpinoit          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MALLOC_H
-#define MALLOC_H
+# define MALLOC_H
 
-#include <stddef.h>
-#include <stdbool.h>
-#include <pthread.h>
-
-#define DEBUG 1
+# include <stddef.h>
+# include <stdbool.h>
+# include <pthread.h>
 
 void *malloc(size_t size);
 void *calloc(size_t count, size_t size);

@@ -1,25 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   config.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpinoit <rpinoit@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/14 14:28:56 by rpinoit           #+#    #+#             */
+/*   Updated: 2020/02/14 14:29:55 by rpinoit          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CONFIG_H
-#define CONFIG_H
+# define CONFIG_H
 
-#include <stddef.h>
+# include <stddef.h>
 
-typedef enum e_config_type
+typedef enum	e_config_type
 {
 	TINY = 0,
 	SMALL = 1,
 	LARGE = 2,
 	TYPES = 3
-} t_config_type;
+}				t_config_type;
 
-typedef struct s_config
+typedef struct	s_config
 {
 	size_t heap_size;
 	size_t chunk_min;
 	size_t chunk_max;
-} t_config;
+}				t_config;
 
-t_config get_config(t_config_type type);
-t_config_type get_config_type(size_t size);
-char *config_type_to_string(t_config_type type);
+t_config		get_config(t_config_type type);
+t_config_type	get_config_type(size_t size);
+char			*config_type_to_string(t_config_type type);
 
 #endif
