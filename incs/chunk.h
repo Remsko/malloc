@@ -22,11 +22,13 @@ t_chunk *get_chunk_from_payload(void *payload);
 t_chunk *get_next_chunk(t_chunk *chunk);
 t_chunk *get_previous_chunk(t_chunk *chunk);
 t_chunk *get_first_chunk(t_heap *heap);
+void *get_chunk_payload(t_chunk *chunk);
+
 t_chunk *split_chunk(t_heap *heap, t_chunk *chunk, size_t size);
 t_chunk *coalesce_chunk(t_heap *heap, t_chunk *chunk);
-t_chunk *search_free_chunk(t_heap **head, size_t size);
 
-void *get_chunk_payload(t_chunk *chunk);
+t_chunk *search_free_chunk(t_heap **head, size_t size);
+t_chunk *get_free_chunk(t_heap **head, size_t chunk_size);
 
 size_t get_payload_size(t_chunk *chunk);
 size_t get_chunk_size(t_chunk *chunk);

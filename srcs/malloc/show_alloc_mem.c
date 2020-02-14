@@ -3,19 +3,19 @@
 #include "config.h"
 #include "arena.h"
 #include "malloc.h"
-#include <stdio.h>
+#include "ft_printf.h"
 
 static void show_chunk(t_chunk *chunk)
 {
 	if (!chunk_is_free(chunk))
-		printf("0x%lX - 0x%lX [%u]: next(%zu octets) prev(%zu octets)\n", (unsigned long)chunk, (unsigned long)get_next_chunk(chunk), chunk_is_free(chunk), get_chunk_size(chunk), chunk->backward);
+		ft_printf("0x%lX - 0x%lX : %zu octets\n", (unsigned long)chunk, (unsigned long)get_next_chunk(chunk), get_chunk_size(chunk));
 }
 
 static void show_heap(t_heap *heap, t_config_type type)
 {
 	t_chunk *chunk;
 
-	printf("%s : 0x%lX %zu octets\n", config_type_to_string(type), (unsigned long)heap, heap->size);
+	ft_printf("%s : 0x%lX\n", config_type_to_string(type), (unsigned long)heap);
 	chunk = get_first_chunk(heap);
 	while (chunk_is_on_heap(heap, chunk))
 	{
@@ -50,12 +50,12 @@ static void show_alloc_mem_unclocked(void)
 	total = 0;
 	for (t_config_type type = 0; type < TYPES; type++)
 		total += show_heap_and_count(type);
-	printf("Total : %zu octets\n", total);
+	ft_printf("Total : %zu octets\n", total);
 }
 
 void show_alloc_mem(void)
 {
 	pthread_mutex_lock(&g_thread_mutex);
 	show_alloc_mem_unclocked();
-	pthread_mutex_lock(&g_thread_mutex);
+	pthread_mutex_unlock(&g_thread_mutex);
 }
