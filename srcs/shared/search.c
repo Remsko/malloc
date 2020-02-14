@@ -6,7 +6,7 @@
 /*   By: rpinoit <rpinoit@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 14:47:59 by rpinoit           #+#    #+#             */
-/*   Updated: 2020/02/14 14:59:08 by rpinoit          ###   ########.fr       */
+/*   Updated: 2020/02/14 16:38:54 by rpinoit          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,33 +39,29 @@ t_chunk	*search_free_chunk(t_heap **head, size_t size)
 	return (NULL);
 }
 
-bool	search_heap_in_heaps(t_chunk *chunk, t_heap ***head_fnd, t_heap **heap_fnd)
+bool	search_heap_in_heaps(t_chunk *chunk, t_heap ***head_fnd,
+			t_heap **heap_fnd)
 {
-	t_heap	**heap[TYPES];
-	t_heap	*h;
-	bool	not_finished;
+	t_heap			**head;
+	t_heap			*h;
+	t_config_type	type;
 
-	for (t_config_type type = 0; type < TYPES; type++)
-		heap[type] = get_arena_heap_head(type);
-	not_finished = true;
-	while (not_finished)
+	type = 0;
+	while (type < TYPES)
 	{
-		not_finished = false;
-		for (t_config_type type = 0; type < TYPES; type++)
+		head = get_arena_heap_head(type);
+		h = *head;
+		while (h != NULL)
 		{
-			h = *(heap[type]);
-			if (h != NULL)
+			if (chunk_is_on_heap(h, chunk))
 			{
-				not_finished = true;
-				if (chunk_is_on_heap(h, chunk))
-				{
-					*head_fnd = heap[type];
-					*heap_fnd = h;
-					return (true);
-				}
-				heap[type] = &h->next;
+				*head_fnd = head;
+				*heap_fnd = h;
+				return (true);
 			}
+			h = h->next;
 		}
+		type++;
 	}
 	return (false);
 }
