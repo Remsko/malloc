@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpinoit <rpinoit@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/14 14:33:55 by rpinoit           #+#    #+#             */
+/*   Updated: 2020/02/14 14:34:53 by rpinoit          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stddef.h>
 
-inline static void align_copy_fwd(unsigned char **pdst,
+inline static void	align_copy_fwd(unsigned char **pdst,
 		const unsigned char **psrc, size_t *n)
 {
 	while (*n > 0 && (size_t)(*pdst) % sizeof(unsigned long) > 0)
@@ -12,7 +24,7 @@ inline static void align_copy_fwd(unsigned char **pdst,
 	}
 }
 
-inline static void block_copy_fwd(unsigned long **pdst,
+inline static void	block_copy_fwd(unsigned long **pdst,
 		const unsigned long **psrc, size_t blocks)
 {
 	while (blocks > 0)
@@ -31,7 +43,7 @@ inline static void block_copy_fwd(unsigned long **pdst,
 	}
 }
 
-inline static void word_copy_fwd(unsigned long **pdst,
+inline static void	word_copy_fwd(unsigned long **pdst,
 		const unsigned long **psrc, size_t words)
 {
 	while (words > 0)
@@ -43,7 +55,7 @@ inline static void word_copy_fwd(unsigned long **pdst,
 	}
 }
 
-inline static void byte_copy_fwd(unsigned char **pdst,
+inline static void	byte_copy_fwd(unsigned char **pdst,
 		const unsigned char **psrc, size_t bytes)
 {
 	while (bytes > 0)
@@ -55,7 +67,7 @@ inline static void byte_copy_fwd(unsigned char **pdst,
 	}
 }
 
-void *ft_memcpy(void *dst, const void *src, size_t n)
+void				*ft_memcpy(void *dst, const void *src, size_t n)
 {
 	void *p;
 

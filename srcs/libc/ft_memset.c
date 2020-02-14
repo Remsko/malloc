@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpinoit <rpinoit@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/14 14:34:07 by rpinoit           #+#    #+#             */
+/*   Updated: 2020/02/14 14:36:00 by rpinoit          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stddef.h>
 
-inline static void align_word(unsigned char **pdst, unsigned char c, size_t *n)
+inline static void	align_word(unsigned char **pdst, unsigned char c, size_t *n)
 {
 	while (*n > 0 && (size_t)(*pdst) % sizeof(unsigned long) > 0)
 	{
@@ -10,7 +22,7 @@ inline static void align_word(unsigned char **pdst, unsigned char c, size_t *n)
 	}
 }
 
-inline static void block_set(unsigned long **pdst, unsigned long cccc,
+inline static void	block_set(unsigned long **pdst, unsigned long cccc,
 		size_t blocks)
 {
 	while (blocks > 0)
@@ -28,7 +40,7 @@ inline static void block_set(unsigned long **pdst, unsigned long cccc,
 	}
 }
 
-inline static void word_set(unsigned long **pdst, unsigned long cccc,
+inline static void	word_set(unsigned long **pdst, unsigned long cccc,
 		size_t words)
 {
 	while (words > 0)
@@ -39,7 +51,7 @@ inline static void word_set(unsigned long **pdst, unsigned long cccc,
 	}
 }
 
-inline static void byte_set(unsigned char **pdst, unsigned char c,
+inline static void	byte_set(unsigned char **pdst, unsigned char c,
 		size_t bytes)
 {
 	while (bytes > 0)
@@ -50,10 +62,10 @@ inline static void byte_set(unsigned char **pdst, unsigned char c,
 	}
 }
 
-void *ft_memset(void *s, int c, size_t n)
+void				*ft_memset(void *s, int c, size_t n)
 {
-	void *p;
-	unsigned long cccc;
+	void			*p;
+	unsigned long	cccc;
 
 	p = s;
 	if (n >= sizeof(unsigned long))
