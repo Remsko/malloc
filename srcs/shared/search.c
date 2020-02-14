@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   search.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpinoit <rpinoit@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/14 14:47:59 by rpinoit           #+#    #+#             */
+/*   Updated: 2020/02/14 14:59:08 by rpinoit          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "heap.h"
 #include "chunk.h"
 #include "arena.h"
 #include "malloc.h"
 
-t_chunk *search_free_chunk(t_heap **head, size_t size)
+t_chunk	*search_free_chunk(t_heap **head, size_t size)
 {
-	t_chunk *chunk;
+	t_chunk	*chunk;
 
 	if (head != NULL)
 	{
@@ -17,21 +29,21 @@ t_chunk *search_free_chunk(t_heap **head, size_t size)
 				if (chunk_is_available(chunk, size))
 				{
 					split_chunk(*head, chunk, size);
-					return chunk;
+					return (chunk);
 				}
 				chunk = get_next_chunk(chunk);
 			}
 			head = &(*head)->next;
 		}
 	}
-	return NULL;
+	return (NULL);
 }
 
-bool search_heap_in_heaps(t_chunk *chunk, t_heap ***head_fnd, t_heap **heap_fnd)
+bool	search_heap_in_heaps(t_chunk *chunk, t_heap ***head_fnd, t_heap **heap_fnd)
 {
-	t_heap **heap[TYPES];
-	t_heap *h;
-	bool not_finished;
+	t_heap	**heap[TYPES];
+	t_heap	*h;
+	bool	not_finished;
 
 	for (t_config_type type = 0; type < TYPES; type++)
 		heap[type] = get_arena_heap_head(type);
@@ -49,11 +61,11 @@ bool search_heap_in_heaps(t_chunk *chunk, t_heap ***head_fnd, t_heap **heap_fnd)
 				{
 					*head_fnd = heap[type];
 					*heap_fnd = h;
-					return true;
+					return (true);
 				}
 				heap[type] = &h->next;
 			}
 		}
 	}
-	return false;
+	return (false);
 }

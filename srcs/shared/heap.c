@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heap.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpinoit <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/14 14:47:49 by rpinoit           #+#    #+#             */
+/*   Updated: 2020/02/14 14:47:54 by rpinoit          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "heap.h"
 #include "config.h"
 #include "chunk.h"
@@ -52,7 +64,7 @@ t_heap *new_heap(void *memory, size_t size)
 
 t_heap *insert_heap(t_heap **head, t_heap *new)
 {
-new->next = (*head);
+	new->next = (*head);
 	(*head) = new;
 	return new;
 }

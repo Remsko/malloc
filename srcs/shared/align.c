@@ -1,17 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   align.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpinoit <rpinoit@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/14 14:47:21 by rpinoit           #+#    #+#             */
+/*   Updated: 2020/02/14 14:48:37 by rpinoit          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "align.h"
 #include <unistd.h>
 
-size_t align(size_t size, size_t alignment)
+size_t	align(size_t size, size_t alignment)
 {
 	return ((size) + (alignment - 1)) & ~(alignment - 1);
 }
 
-size_t page_align(size_t size)
+size_t	page_align(size_t size)
 {
-	return align(size, (size_t)getpagesize());
+	return (align(size, (size_t)getpagesize()));
 }
 
-size_t memory_align(size_t size)
+size_t	memory_align(size_t size)
 {
-	return align(size, MEMORY_ALIGNMENT);
+	return (align(size, MEMORY_ALIGNMENT));
 }
