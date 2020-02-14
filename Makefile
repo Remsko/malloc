@@ -13,8 +13,8 @@ INC_NAME += align.h
 INC_NAME += arena.h
 INC_NAME += chunk.h
 INC_NAME += config.h
-INC_NAME += debug.h
 INC_NAME += heap.h
+INC_NAME += libc.h
 INC_NAME += malloc.h
 INC_NAME += memory.h
 
@@ -44,11 +44,6 @@ SRC_NAME += heap.c
 SRC_NAME += memory.c
 SRC_NAME += search.c
 
-SRC_SUB += debug
-SRC_NAME += print_number.c
-SRC_NAME += print_string.c
-SRC_NAME += print_heap.c
-
 SRC_SUB += libc
 SRC_NAME += ft_bzero.c
 SRC_NAME += ft_memcpy.c
@@ -67,13 +62,6 @@ LIBPF = $(LIBPF_PATH)/libftprintf.a
 CFLAGS += -I$(LIBPF_PATH)/incs
 LDFLAGS += -L $(LIBPF_PATH) -lftprintf
 
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Darwin)
-	REPLACE := ./run.sh ./test
-else 
-	REPLACE := LD_PRELOAD=./libft_malloc.so LD_LIBRARY_PATH=. ./test
-endif
-
 all: $(NAME)
 
 $(NAME): $(OBJ) | $(LIBPF)
@@ -91,14 +79,8 @@ clean:
 	$(RM) $(OBJ_PATH)
 
 fclean: clean
-	make fclean -C tests
 	$(RM) $(NAME) $(LINK)
 
 re: fclean all
-
-test: $(NAME)
-	make re -C tests
-	mv ./tests/test .
-	$(REPLACE)
 
 .PHONY: all clean fclean re test
